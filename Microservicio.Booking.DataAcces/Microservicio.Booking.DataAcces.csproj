@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Common\" />
+    <Folder Include="Configurations\" />
+    <Folder Include="Context\" />
+    <Folder Include="Entities\" />
+    <Folder Include="Queries\" />
+    <Folder Include="Repositorios\Interfaces\" />
+  </ItemGroup>
+
+</Project>
