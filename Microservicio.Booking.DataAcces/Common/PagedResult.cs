@@ -1,4 +1,4 @@
-namespace Microservicio.Usuarios.DataAccess.Common;
+namespace Microservicio.Booking.DataAccess.Common;
 
 /// <summary>
 /// Envuelve una página de resultados junto con los metadatos de paginación.
