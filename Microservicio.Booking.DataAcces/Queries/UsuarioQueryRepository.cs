@@ -1,9 +1,9 @@
-using Microservicio.Usuarios.DataAccess.Common;
-using Microservicio.Usuarios.DataAccess.Context;
-using Microservicio.Usuarios.DataAccess.Entities;
+using Microservicio.Booking.DataAccess.Common;
+using Microservicio.Booking.DataAccess.Context;
+using Microservicio.Booking.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Microservicio.Usuarios.DataAccess.Queries;
+namespace Microservicio.Booking.DataAccess.Queries;
 
 // =============================================================================
 // DTOs de proyección — viven aquí porque son contratos de solo lectura
