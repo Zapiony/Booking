@@ -1,7 +1,7 @@
-using Microservicio.Usuarios.DataAccess.Common;
-using Microservicio.Usuarios.DataAccess.Entities;
+using Microservicio.Booking.DataAccess.Common;
+using Microservicio.Booking.DataAccess.Entities;
 
-namespace Microservicio.Usuarios.DataAccess.Repositories.Interfaces;
+namespace Microservicio.Booking.DataAccess.Repositories.Interfaces;
 
 /// <summary>
 /// Contrato de acceso a datos para las entidades Rol y UsuarioRol.
