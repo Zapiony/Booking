@@ -1,4 +1,4 @@
-namespace Microservicio.Usuarios.DataAccess.Entities;
+namespace Microservicio.Booking.DataAccess.Entities;
 
 /// <summary>
 /// Entidad que representa la tabla booking.usuario_app.
@@ -11,12 +11,13 @@ public class UsuarioAppEntity
     // -------------------------------------------------------------------------
 
     /// <summary>
-    /// PK interna. No se expone en la API.
+    /// PK interna generada por SERIAL. No se expone en la API.
     /// </summary>
     public int IdUsuario { get; set; }
 
     /// <summary>
     /// Identificador público expuesto en la API REST.
+    /// Generado por gen_random_uuid() en PostgreSQL.
     /// </summary>
     public Guid UsuarioGuid { get; set; }
 
@@ -61,16 +62,6 @@ public class UsuarioAppEntity
     public string CreadoPorUsuario { get; set; } = string.Empty;
     public string? ModificadoPorUsuario { get; set; }
     public DateTime? FechaModificacionUtc { get; set; }
-
-    // -------------------------------------------------------------------------
-    // [6] Concurrencia optimista (ROWVERSION → EF Core token)
-    // -------------------------------------------------------------------------
-
-    /// <summary>
-    /// Token de concurrencia optimista mapeado a ROWVERSION en SQL Server.
-    /// EF Core lo gestiona automáticamente; nunca se asigna manualmente.
-    /// </summary>
-    public byte[] RowVersion { get; set; } = [];
 
     // -------------------------------------------------------------------------
     // Navegación

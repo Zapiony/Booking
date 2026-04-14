@@ -1,12 +1,12 @@
-using Microservicio.Usuarios.DataAccess.Entities;
+using Microservicio.Booking.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Microservicio.Usuarios.DataAccess.Configurations;
+namespace Microservicio.Booking.DataAccess.Configurations;
 
 /// <summary>
 /// Configuración de EF Core para la tabla booking.rol.
-/// Define mapeo de columnas, restricciones, índices y concurrencia optimista.
+/// Motor: PostgreSQL (Npgsql).
 /// </summary>
 public class RolConfiguration : IEntityTypeConfiguration<RolEntity>
 {
@@ -24,11 +24,11 @@ public class RolConfiguration : IEntityTypeConfiguration<RolEntity>
 
         builder.Property(r => r.IdRol)
                .HasColumnName("id_rol")
-               .UseIdentityColumn();
+               .UseIdentityColumn();              // mapea SERIAL de PostgreSQL
 
         builder.Property(r => r.RolGuid)
                .HasColumnName("rol_guid")
-               .HasDefaultValueSql("NEWID()")
+               .HasDefaultValueSql("gen_random_uuid()")   // función nativa de PostgreSQL
                .IsRequired();
 
         builder.HasIndex(r => r.RolGuid)
@@ -81,8 +81,8 @@ public class RolConfiguration : IEntityTypeConfiguration<RolEntity>
         // -------------------------------------------------------------------------
         builder.Property(r => r.FechaRegistroUtc)
                .HasColumnName("fecha_registro_utc")
-               .HasColumnType("DATETIME2(0)")
-               .HasDefaultValueSql("SYSUTCDATETIME()")
+               .HasColumnType("TIMESTAMP(0)")                          // tipo PostgreSQL
+               .HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'")        // función PostgreSQL
                .IsRequired();
 
         builder.Property(r => r.CreadoPorUsuario)
@@ -97,19 +97,11 @@ public class RolConfiguration : IEntityTypeConfiguration<RolEntity>
 
         builder.Property(r => r.FechaModificacionUtc)
                .HasColumnName("fecha_modificacion_utc")
-               .HasColumnType("DATETIME2(0)")
+               .HasColumnType("TIMESTAMP(0)")
                .IsRequired(false);
 
         // -------------------------------------------------------------------------
-        // [5] Concurrencia optimista — ROWVERSION
-        // -------------------------------------------------------------------------
-        builder.Property(r => r.RowVersion)
-               .HasColumnName("row_version")
-               .IsRowVersion()
-               .IsRequired();
-
-        // -------------------------------------------------------------------------
-        // Navegación — UsuarioRol (uno a muchos)
+        // Navegación
         // -------------------------------------------------------------------------
         builder.HasMany(r => r.UsuariosRoles)
                .WithOne(ur => ur.Rol)
