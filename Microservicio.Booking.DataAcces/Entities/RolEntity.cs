@@ -1,4 +1,4 @@
-namespace Microservicio.Usuarios.DataAccess.Entities;
+namespace Microservicio.Booking.DataAccess.Entities;
 
 /// <summary>
 /// Entidad que representa la tabla booking.rol.
@@ -54,16 +54,6 @@ public class RolEntity
     public string CreadoPorUsuario { get; set; } = string.Empty;
     public string? ModificadoPorUsuario { get; set; }
     public DateTime? FechaModificacionUtc { get; set; }
-
-    // -------------------------------------------------------------------------
-    // [5] Concurrencia optimista (ROWVERSION → EF Core token)
-    // -------------------------------------------------------------------------
-
-    /// <summary>
-    /// Token de concurrencia optimista mapeado a ROWVERSION en SQL Server.
-    /// EF Core lo gestiona automáticamente; nunca se asigna manualmente.
-    /// </summary>
-    public byte[] RowVersion { get; set; } = [];
 
     // -------------------------------------------------------------------------
     // Navegación
