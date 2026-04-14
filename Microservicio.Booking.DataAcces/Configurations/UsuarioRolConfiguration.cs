@@ -1,12 +1,12 @@
-using Microservicio.Usuarios.DataAccess.Entities;
+using Microservicio.Booking.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Microservicio.Usuarios.DataAccess.Configurations;
+namespace Microservicio.Booking.DataAccess.Configurations;
 
 /// <summary>
 /// Configuración de EF Core para la tabla puente booking.usuarios_roles.
-/// Define la relación N:M entre UsuarioApp y Rol con datos propios de ciclo de vida.
+/// Motor: PostgreSQL (Npgsql).
 /// </summary>
 public class UsuarioRolConfiguration : IEntityTypeConfiguration<UsuarioRolEntity>
 {
@@ -24,7 +24,7 @@ public class UsuarioRolConfiguration : IEntityTypeConfiguration<UsuarioRolEntity
 
         builder.Property(ur => ur.IdUsuarioRol)
                .HasColumnName("id_usuario_rol")
-               .UseIdentityColumn();
+               .UseIdentityColumn();              // mapea SERIAL de PostgreSQL
 
         // -------------------------------------------------------------------------
         // [2] Claves foráneas
@@ -42,7 +42,7 @@ public class UsuarioRolConfiguration : IEntityTypeConfiguration<UsuarioRolEntity
                .IsUnique()
                .HasDatabaseName("uq_usuarios_roles_usuario_rol");
 
-        // Índices de búsqueda individuales (reflejan los del script SQL)
+        // Índices de búsqueda individuales
         builder.HasIndex(ur => ur.IdUsuario)
                .HasDatabaseName("idx_usuarios_roles_usuario");
 
@@ -78,8 +78,8 @@ public class UsuarioRolConfiguration : IEntityTypeConfiguration<UsuarioRolEntity
         // -------------------------------------------------------------------------
         builder.Property(ur => ur.FechaRegistroUtc)
                .HasColumnName("fecha_registro_utc")
-               .HasColumnType("DATETIME2(0)")
-               .HasDefaultValueSql("SYSUTCDATETIME()")
+               .HasColumnType("TIMESTAMP(0)")                          // tipo PostgreSQL
+               .HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'")        // función PostgreSQL
                .IsRequired();
 
         builder.Property(ur => ur.CreadoPorUsuario)
@@ -94,20 +94,11 @@ public class UsuarioRolConfiguration : IEntityTypeConfiguration<UsuarioRolEntity
 
         builder.Property(ur => ur.FechaModificacionUtc)
                .HasColumnName("fecha_modificacion_utc")
-               .HasColumnType("DATETIME2(0)")
+               .HasColumnType("TIMESTAMP(0)")
                .IsRequired(false);
 
         // -------------------------------------------------------------------------
-        // [5] Concurrencia optimista — ROWVERSION
-        // -------------------------------------------------------------------------
-        builder.Property(ur => ur.RowVersion)
-               .HasColumnName("row_version")
-               .IsRowVersion()
-               .IsRequired();
-
-        // -------------------------------------------------------------------------
-        // Navegación — FKs explícitas (ya definidas en UsuarioApp y RolConfiguration,
-        // aquí se declaran desde el lado "muchos" para completar el grafo de EF Core)
+        // Navegación
         // -------------------------------------------------------------------------
         builder.HasOne(ur => ur.Usuario)
                .WithMany(u => u.UsuariosRoles)
