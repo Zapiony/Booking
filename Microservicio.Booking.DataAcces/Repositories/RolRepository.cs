@@ -1,10 +1,10 @@
-using Microservicio.Usuarios.DataAccess.Common;
-using Microservicio.Usuarios.DataAccess.Context;
-using Microservicio.Usuarios.DataAccess.Entities;
-using Microservicio.Usuarios.DataAccess.Repositories.Interfaces;
+using Microservicio.Booking.DataAccess.Common;
+using Microservicio.Booking.DataAccess.Context;
+using Microservicio.Booking.DataAccess.Entities;
+using Microservicio.Booking.DataAccess.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace Microservicio.Usuarios.DataAccess.Repositories;
+namespace Microservicio.Booking.DataAccess.Repositories;
 
 /// <summary>
 /// Implementación de IRolRepository.
