@@ -1,4 +1,4 @@
-using Microservicio.Servicios.DataAccess.Common;
+using Microservicio.Booking.DataAccess.Common;
 using Microservicio.Servicios.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -99,12 +99,13 @@ public class ServicioQueryRepository : IServicioQueryRepository
         int tamanoPagina,
         CancellationToken cancellationToken = default)
     {
-        var terminoLower = termino.Trim().ToLower();
+        var terminoNormalizado = termino.Trim();
+        var patron = $"%{terminoNormalizado}%";
 
         var query = QueryVigentes
             .Where(s =>
-                s.RazonSocial.ToLower().Contains(terminoLower) ||
-                (s.NombreComercial != null && s.NombreComercial.ToLower().Contains(terminoLower)))
+                EF.Functions.ILike(s.RazonSocial, patron) ||
+                (s.NombreComercial != null && EF.Functions.ILike(s.NombreComercial, patron)))
             .OrderBy(s => s.RazonSocial);
 
         var totalRegistros = await query.CountAsync(cancellationToken);
