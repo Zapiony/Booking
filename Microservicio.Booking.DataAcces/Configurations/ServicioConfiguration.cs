@@ -28,7 +28,7 @@ public class ServicioConfiguration : IEntityTypeConfiguration<ServicioEntity>
 
         builder.Property(s => s.GuidServicio)
                .HasColumnName("guid_servicio")
-               .HasDefaultValueSql("NEWID()")
+               .HasDefaultValueSql("gen_random_uuid()")
                .IsRequired();
 
         builder.HasIndex(s => s.GuidServicio)
@@ -134,8 +134,8 @@ public class ServicioConfiguration : IEntityTypeConfiguration<ServicioEntity>
 
         builder.Property(s => s.FechaRegistroUtc)
                .HasColumnName("fecha_registro_utc")
-               .HasColumnType("DATETIMEOFFSET")
-               .HasDefaultValueSql("SYSUTCDATETIME()")
+               .HasColumnType("timestamp with time zone")
+               .HasDefaultValueSql("CURRENT_TIMESTAMP")
                .IsRequired();
 
         builder.Property(s => s.ModificadoPorUsuario)
@@ -145,7 +145,7 @@ public class ServicioConfiguration : IEntityTypeConfiguration<ServicioEntity>
 
         builder.Property(s => s.FechaModificacionUtc)
                .HasColumnName("fecha_modificacion_utc")
-               .HasColumnType("DATETIMEOFFSET")
+               .HasColumnType("timestamp with time zone")
                .IsRequired(false);
 
         builder.Property(s => s.ModificacionIp)
@@ -159,11 +159,13 @@ public class ServicioConfiguration : IEntityTypeConfiguration<ServicioEntity>
                .IsRequired(false);
 
         // -------------------------------------------------------------------------
-        // [5] Concurrencia optimista — ROWVERSION
+        // [5] Concurrencia optimista — PostgreSQL (bytea)
         // -------------------------------------------------------------------------
         builder.Property(s => s.RowVersion)
                .HasColumnName("row_version")
-               .IsRowVersion()
+               .HasColumnType("bytea")
+               .ValueGeneratedOnAddOrUpdate()
+               .IsConcurrencyToken()
                .IsRequired();
 
         // -------------------------------------------------------------------------
