@@ -1,4 +1,4 @@
-using Microservicio.Servicios.DataAccess.Common;
+using Microservicio.Booking.DataAccess.Common;
 
 namespace Microservicio.Servicios.DataAccess.Queries;
 
