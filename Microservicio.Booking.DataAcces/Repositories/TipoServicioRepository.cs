@@ -1,4 +1,4 @@
-using Microservicio.Servicios.DataAccess.Common;
+using Microservicio.Booking.DataAccess.Common;
 using Microservicio.Servicios.DataAccess.Entities;
 using Microservicio.Servicios.DataAccess.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
