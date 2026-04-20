@@ -54,9 +54,9 @@ public sealed record ClienteDetalleDto(
 ///   - AsNoTracking() en todas las consultas para máximo rendimiento.
 public class ClienteQueryRepository
 {
-    private readonly ClienteDbContext _context;
+    private readonly BookingDbContext _context;
 
-    public ClienteQueryRepository(ClienteDbContext context)
+    public ClienteQueryRepository(BookingDbContext context)
     {
         _context = context;
     }
