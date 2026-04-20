@@ -14,9 +14,9 @@ namespace Microservicio.Booking.DataAccess.Repositories;
 /// </summary>
 public class ClienteRepository : IClienteRepository
 {
-    private readonly ClienteDbContext _context;
+    private readonly BookingDbContext _context;
 
-    public ClienteRepository(ClienteDbContext context)
+    public ClienteRepository(BookingDbContext context)
     {
         _context = context;
     }
