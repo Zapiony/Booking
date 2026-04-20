@@ -72,6 +72,15 @@ public class UsuarioRepository : IUsuarioRepository
                 cancellationToken);
     }
 
+    public async Task<UsuarioAppEntity?> ObtenerParaActualizarAsync(
+    int idUsuario,
+    CancellationToken cancellationToken = default)
+    {
+        return await _context.Usuarios
+            .FirstOrDefaultAsync(u => u.IdUsuario == idUsuario
+                                   && !u.EsEliminado, cancellationToken);
+    }
+
     // -------------------------------------------------------------------------
     // Lecturas con roles
     // -------------------------------------------------------------------------
