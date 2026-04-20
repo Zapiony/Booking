@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\OneDrive\Documents\GitHub\Booking\Microservicio.Booking.DataAcces\Microservicio.Booking.DataAcces.csproj" />
+    <ProjectReference Include="..\Microservicio.Booking.DataAcces\Microservicio.Booking.DataAcces.csproj" />
   </ItemGroup>
 
 </Project>
