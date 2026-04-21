@@ -2,6 +2,7 @@
 using Microservicio.Booking.DataAccess.Entities;
 using Microservicio.Servicios.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
+namespace Microservicio.Booking.DataAccess.Context;
 
 public class BookingDbContext : DbContext
 {
