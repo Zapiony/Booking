@@ -46,6 +46,12 @@ public class FacturacionRepository : IFacturacionRepository
         return await QueryVigentes.FirstOrDefaultAsync(f => f.NumeroFactura == numeroFactura, cancellationToken);
     }
 
+    public async Task<FacturacionEntity?> ObtenerParaActualizarAsync(Guid guidFactura, CancellationToken cancellationToken = default)
+    {
+        // Se usa el contexto directamente para asegurar el tracking (sin AsNoTracking)
+        return await _context.Facturaciones.FirstOrDefaultAsync(f => f.GuidFactura == guidFactura, cancellationToken);
+    }
+
     // -------------------------------------------------------------------------
     // Lecturas paginadas
     // -------------------------------------------------------------------------

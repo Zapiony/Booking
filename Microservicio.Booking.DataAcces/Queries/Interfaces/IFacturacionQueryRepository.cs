@@ -31,7 +31,14 @@ public interface IFacturacionQueryRepository
     /// <summary>
     /// Retorna una página de facturaciones en formato resumen.
     /// </summary>
-    Task<PagedResult<FacturacionResumenDto>> ListarFacturacionesAsync(int paginaActual, int tamanoPagina, CancellationToken cancellationToken = default);
+    Task<PagedResult<FacturacionResumenDto>> ListarFacturacionesAsync(
+        string? estado, 
+        int? idCliente, 
+        DateTime? fechaInicio, 
+        DateTime? fechaFin, 
+        int paginaActual, 
+        int tamanoPagina, 
+        CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Retorna el resumen de una facturación específica por su GUID público.

@@ -1,4 +1,4 @@
-﻿using Microservicio.Booking.DataAccess.Context;
+using Microservicio.Booking.DataAccess.Context;
 using Microservicio.Booking.DataAccess.Queries;
 using Microservicio.Booking.DataAccess.Repositories;
 using Microservicio.Booking.DataAccess.Repositories.Interfaces;
@@ -21,16 +21,17 @@ public class UnitOfWork : IUnitOfWork
     public ITipoServicioRepository TipoServicioRepository { get; }
 
     // Facturación
-    //public IFacturacionRepository FacturacionRepository { get; }
+    public IFacturacionRepository FacturacionRepository { get; }
 
     // Auditoría
-    //public ILogAuditoriaRepository LogAuditoriaRepository { get; }
+    public ILogAuditoriaRepository LogAuditoriaRepository { get; }
 
     // Queries (solo lectura — AsNoTracking)
     public UsuarioQueryRepository UsuarioQueryRepository { get; }
     public ClienteQueryRepository ClienteQueryRepository { get; }
     public ServicioQueryRepository ServicioQueryRepository { get; }
-    //public FacturacionQueryRepository FacturacionQueryRepository { get; }
+    public IFacturacionQueryRepository FacturacionQueryRepository { get; }
+    public ILogAuditoriaQueryRepository LogAuditoriaQueryRepository { get; }
 
     public UnitOfWork(BookingDbContext context)
     {
@@ -41,13 +42,14 @@ public class UnitOfWork : IUnitOfWork
         ClienteRepository = new ClienteRepository(_context);
         ServicioRepository = new ServicioRepository(_context);
         TipoServicioRepository = new TipoServicioRepository(_context);
-        //FacturacionRepository = new FacturacionRepository(_context);
-        //LogAuditoriaRepository = new LogAuditoriaRepository(_context);
+        FacturacionRepository = new FacturacionRepository(_context);
+        LogAuditoriaRepository = new LogAuditoriaRepository(_context);
 
         UsuarioQueryRepository = new UsuarioQueryRepository(_context);
         ClienteQueryRepository = new ClienteQueryRepository(_context);
         ServicioQueryRepository = new ServicioQueryRepository(_context);
-        //FacturacionQueryRepository = new FacturacionQueryRepository(_context);
+        FacturacionQueryRepository = new FacturacionQueryRepository(_context);
+        LogAuditoriaQueryRepository = new LogAuditoriaQueryRepository(_context);
     }
 
     public async Task<int> SaveChangesAsync(
