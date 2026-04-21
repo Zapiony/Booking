@@ -7,12 +7,6 @@ using Microservicio.Booking.DataManagement.Interfaces;
 
 namespace Microservicio.Booking.Business.Services;
 
-/// <summary>
-/// Servicio de autenticación.
-/// Valida credenciales contra los hashes almacenados, verifica el estado
-/// del usuario y prepara la información base para que la API genere el JWT.
-/// No emite tokens — eso es responsabilidad de la capa 4.
-/// </summary>
 public class AuthService : IAuthService
 {
     private readonly IUsuarioDataService _usuarioDataService;
@@ -26,50 +20,42 @@ public class AuthService : IAuthService
         LoginRequest request,
         CancellationToken cancellationToken = default)
     {
-        // 1. Validar que los campos no estén vacíos
         UsuarioValidator.ValidarLogin(request.Username, request.Password);
 
-        // 2. Buscar usuario por username
+        // 1. Buscar usuario (sin hash — UsuarioDataModel no lo expone)
         var usuario = await _usuarioDataService
             .ObtenerPorUsernameAsync(request.Username, cancellationToken);
 
-        // Mensaje genérico para no revelar si el username existe o no
         if (usuario is null)
             throw new UnauthorizedBusinessException("Usuario o contraseña inválidos.");
 
-        // 3. Verificar que el usuario está activo
         if (!usuario.Activo)
             throw new UnauthorizedBusinessException("El usuario se encuentra inactivo.");
 
-        // 4. Verificar contraseña contra el hash almacenado
-        // Se necesita acceder al hash — se obtiene directamente del repositorio
-        // a través de un método específico que sí lo expone (no del DataModel).
-        // NOTA: En V1 la verificación se delega a un helper; en V2 se integra
-        // con el repositorio de seguridad de la capa 1.
-        if (!VerificarPassword(request.Password, usuario.UsuarioGuid))
+        // 2. Obtener credenciales solo para verificación
+        var credenciales = await _usuarioDataService
+            .ObtenerCredencialesParaAuthAsync(request.Username, cancellationToken);
+
+        if (credenciales is null)
             throw new UnauthorizedBusinessException("Usuario o contraseña inválidos.");
 
-        // 5. Construir y retornar LoginResponse para que la API genere el JWT
+        // 3. Verificar contraseña contra el hash almacenado
+        if (!VerificarPassword(request.Password, credenciales.Value.PasswordHash, credenciales.Value.PasswordSalt))
+            throw new UnauthorizedBusinessException("Usuario o contraseña inválidos.");
+
         return UsuarioBusinessMapper.ToLoginResponse(usuario);
     }
 
     // -------------------------------------------------------------------------
-    // Helper privado — verificación de contraseña (HMACSHA256)
+    // Helper privado — HMACSHA256 con el salt almacenado
     // -------------------------------------------------------------------------
-
-    /// <summary>
-    /// V1: placeholder de verificación real.
-    /// En V2 se reemplaza con la consulta del hash y salt reales desde la BD.
-    /// El proceso correcto es:
-    ///   1. Obtener PasswordSalt del repositorio
-    ///   2. Recomputar HMACSHA256(password, salt)
-    ///   3. Comparar con PasswordHash almacenado
-    /// </summary>
-    private static bool VerificarPassword(string password, Guid usuarioGuid)
+    private static bool VerificarPassword(string password, string storedHash, string storedSalt)
     {
-        // TODO V2: obtener hash y salt reales desde un método específico
-        // del repositorio que sí los exponga de forma controlada.
-        // Por ahora retorna true para validar el flujo completo de autenticación.
-        return !string.IsNullOrWhiteSpace(password);
+        var saltBytes = Convert.FromBase64String(storedSalt);
+        using var hmac = new System.Security.Cryptography.HMACSHA256(saltBytes);
+        var computedHash = Convert.ToBase64String(
+            hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password)));
+
+        return computedHash == storedHash;
     }
 }
