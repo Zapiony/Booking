@@ -1,4 +1,4 @@
-namespace Microservicio.Servicios.DataAccess.Entities;
+namespace Microservicio.Booking.DataAccess.Entities;
 
 /// <summary>
 /// Entidad que representa la tabla booking.servicio.
