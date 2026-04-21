@@ -1,4 +1,4 @@
-using Microservicio.Servicios.DataAccess.Entities;
+using Microservicio.Booking.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -28,7 +28,7 @@ public class TipoServicioConfiguration : IEntityTypeConfiguration<TipoServicioEn
 
         builder.Property(ts => ts.GuidTipoServicio)
                .HasColumnName("guid_tipo_servicio")
-               .HasDefaultValueSql("NEWID()")
+               .HasDefaultValueSql("gen_random_uuid()")
                .IsRequired();
 
         builder.HasIndex(ts => ts.GuidTipoServicio)
@@ -89,8 +89,8 @@ public class TipoServicioConfiguration : IEntityTypeConfiguration<TipoServicioEn
 
         builder.Property(ts => ts.FechaRegistroUtc)
                .HasColumnName("fecha_registro_utc")
-               .HasColumnType("DATETIMEOFFSET")
-               .HasDefaultValueSql("SYSUTCDATETIME()")
+               .HasColumnType("timestamp with time zone")
+               .HasDefaultValueSql("CURRENT_TIMESTAMP")
                .IsRequired();
 
         builder.Property(ts => ts.ModificadoPorUsuario)
@@ -100,7 +100,7 @@ public class TipoServicioConfiguration : IEntityTypeConfiguration<TipoServicioEn
 
         builder.Property(ts => ts.FechaModificacionUtc)
                .HasColumnName("fecha_modificacion_utc")
-               .HasColumnType("DATETIMEOFFSET")
+               .HasColumnType("timestamp with time zone")
                .IsRequired(false);
 
         builder.Property(ts => ts.ModificacionIp)
@@ -114,11 +114,13 @@ public class TipoServicioConfiguration : IEntityTypeConfiguration<TipoServicioEn
                .IsRequired(false);
 
         // -------------------------------------------------------------------------
-        // [5] Concurrencia optimista — ROWVERSION
+        // [5] Concurrencia optimista — PostgreSQL (bytea)
         // -------------------------------------------------------------------------
         builder.Property(ts => ts.RowVersion)
                .HasColumnName("row_version")
-               .IsRowVersion()
+               .HasColumnType("bytea")
+               .ValueGeneratedOnAddOrUpdate()
+               .IsConcurrencyToken()
                .IsRequired();
 
         // -------------------------------------------------------------------------

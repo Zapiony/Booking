@@ -1,7 +1,7 @@
-using Microservicio.Servicios.DataAccess.Common;
-using Microservicio.Servicios.DataAccess.Entities;
+using Microservicio.Booking.DataAccess.Common;
+using Microservicio.Booking.DataAccess.Entities;
 
-namespace Microservicio.Servicios.DataAccess.Repositories.Interfaces;
+namespace Microservicio.Booking.DataAccess.Repositories.Interfaces;
 
 /// <summary>
 /// Contrato de acceso a datos para la entidad TipoServicio (tabla booking.tipo_servicio).
