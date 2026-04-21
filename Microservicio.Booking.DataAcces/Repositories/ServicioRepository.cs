@@ -1,9 +1,9 @@
 using Microservicio.Booking.DataAccess.Common;
-using Microservicio.Servicios.DataAccess.Entities;
-using Microservicio.Servicios.DataAccess.Repositories.Interfaces;
+using Microservicio.Booking.DataAccess.Entities;
+using Microservicio.Booking.DataAccess.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace Microservicio.Servicios.DataAccess.Repositories;
+namespace Microservicio.Booking.DataAccess.Repositories;
 
 /// <summary>
 /// Implementación de IServicioRepository.
