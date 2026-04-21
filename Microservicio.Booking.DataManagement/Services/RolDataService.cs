@@ -41,6 +41,18 @@ public class RolDataService : IRolDataService
         return entities.Select(RolDataMapper.ToDataModel).ToList();
     }
 
+    public async Task<IReadOnlyList<UsuarioRolDataModel>> ObtenerAsignacionesDeUsuarioAsync(
+    int idUsuario,
+    CancellationToken cancellationToken = default)
+    {
+        var asignaciones = await _unitOfWork.RolRepository
+            .ObtenerRolesDeUsuarioAsync(idUsuario, cancellationToken);
+
+        return asignaciones
+            .Select(UsuarioRolDataMapper.ToDataModel)
+            .ToList();
+    }
+
     // -------------------------------------------------------------------------
     // Verificaciones — Rol
     // -------------------------------------------------------------------------

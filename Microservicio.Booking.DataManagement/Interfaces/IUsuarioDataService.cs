@@ -33,6 +33,15 @@ public interface IUsuarioDataService
         UsuarioFiltroDataModel filtro,
         CancellationToken cancellationToken = default);
 
+    /// <summary>
+    /// Método exclusivo para autenticación. Devuelve hash y salt del usuario
+    /// indicado. No se usa para ningún otro propósito.
+    /// Retorna null si el usuario no existe o está eliminado.
+    /// </summary>
+    Task<(string PasswordHash, string PasswordSalt)?> ObtenerCredencialesParaAuthAsync(
+        string username,
+        CancellationToken cancellationToken = default);
+
     // -------------------------------------------------------------------------
     // Verificaciones
     // -------------------------------------------------------------------------
@@ -44,6 +53,8 @@ public interface IUsuarioDataService
     Task<bool> ExisteCorreoAsync(
         string correo,
         CancellationToken cancellationToken = default);
+
+
 
     // -------------------------------------------------------------------------
     // Escritura

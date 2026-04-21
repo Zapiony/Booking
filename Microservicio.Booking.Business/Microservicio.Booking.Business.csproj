@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Microservicio.Booking.DataManagement\Microservicio.Booking.DataManagement.csproj" />
   </ItemGroup>
 
 </Project>
