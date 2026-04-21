@@ -15,9 +15,9 @@ namespace Microservicio.Booking.DataAccess.Repositories;
 /// </summary>
 public class RolRepository : IRolRepository
 {
-    private readonly UsuarioDbContext _context;
-
-    public RolRepository(UsuarioDbContext context)
+    private readonly BookingDbContext _context;
+        
+    public RolRepository(BookingDbContext context)
     {
         _context = context;
     }
