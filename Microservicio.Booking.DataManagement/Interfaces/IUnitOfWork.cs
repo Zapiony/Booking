@@ -1,5 +1,7 @@
 ﻿using Microservicio.Booking.DataAccess.Queries;
 using Microservicio.Booking.DataAccess.Repositories.Interfaces;
+using Microservicio.Servicios.DataAccess.Queries;
+using Microservicio.Servicios.DataAccess.Repositories.Interfaces;
 
 namespace Microservicio.Booking.DataManagement.Interfaces;
 
@@ -10,16 +12,28 @@ namespace Microservicio.Booking.DataManagement.Interfaces;
 /// </summary>
 public interface IUnitOfWork : IDisposable
 {
- 
+    // -------------------------------------------------------------------------
     // Usuarios
+    // -------------------------------------------------------------------------
     IUsuarioRepository UsuarioRepository { get; }
     IRolRepository RolRepository { get; }
     UsuarioQueryRepository UsuarioQueryRepository { get; }
 
+    // -------------------------------------------------------------------------
     // Clientes
+    // -------------------------------------------------------------------------
     IClienteRepository ClienteRepository { get; }
     ClienteQueryRepository ClienteQueryRepository { get; }
 
+    // -------------------------------------------------------------------------
+    // Servicios
+    // -------------------------------------------------------------------------
+    IServicioRepository ServicioRepository { get; }
+    ITipoServicioRepository TipoServicioRepository { get; }
+    ServicioQueryRepository ServicioQueryRepository { get; }
+
+    // -------------------------------------------------------------------------
     // Persistencia
+    // -------------------------------------------------------------------------
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }
