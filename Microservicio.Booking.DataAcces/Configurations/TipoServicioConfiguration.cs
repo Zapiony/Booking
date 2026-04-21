@@ -1,4 +1,4 @@
-using Microservicio.Servicios.DataAccess.Entities;
+using Microservicio.Booking.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

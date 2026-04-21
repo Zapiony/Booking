@@ -1,5 +1,5 @@
 ﻿using Microservicio.Booking.DataAccess.Common;
-using Microservicio.Booking.DataAccess.;
+using Microservicio.Booking.DataAccess.Context;
 using Microservicio.Booking.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 

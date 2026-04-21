@@ -1,8 +1,8 @@
-using Microservicio.Servicios.DataAccess.Entities;
+using Microservicio.Booking.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Microservicio.Servicios.DataAccess.Configurations;
+namespace Microservicio.Booking.DataAccess.Configurations;
 
 /// <summary>
 /// Configuración de EF Core para la tabla booking.servicio.

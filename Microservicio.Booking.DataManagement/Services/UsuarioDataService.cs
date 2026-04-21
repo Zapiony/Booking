@@ -201,4 +201,17 @@ public class UsuarioDataService : IUsuarioDataService
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         return true;
     }
+
+    public async Task<(string PasswordHash, string PasswordSalt)?> ObtenerCredencialesParaAuthAsync(
+    string username,
+    CancellationToken cancellationToken = default)
+    {
+        var entity = await _unitOfWork.UsuarioRepository
+            .ObtenerPorUsernameAsync(username, cancellationToken);
+
+        if (entity is null || entity.EsEliminado)
+            return null;
+
+        return (entity.PasswordHash, entity.PasswordSalt);
+    }
 }
