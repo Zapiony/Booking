@@ -1,21 +1,20 @@
 namespace Microservicio.Booking.Business.Exceptions;
 
 /// <summary>
-/// Entrada o regla de validación no satisfecha antes o durante la operación de negocio.
+/// Excepción lanzada cuando uno o más campos no cumplen las reglas de negocio.
+/// Contiene la colección de errores de validación para devolver al cliente.
+/// La API la traduce a HTTP 400 Bad Request.
 /// </summary>
 public class ValidationException : BusinessException
 {
-    public IReadOnlyList<string> Errores { get; }
+    /// <summary>
+    /// Lista de mensajes de error de validación.
+    /// </summary>
+    public IReadOnlyCollection<string> Errors { get; }
 
-    public ValidationException(string mensaje, string? codigo = null)
-        : base(mensaje, codigo)
+    public ValidationException(string message, IReadOnlyCollection<string>? errors = null)
+        : base(message)
     {
-        Errores = new[] { mensaje };
-    }
-
-    public ValidationException(IReadOnlyList<string> errores, string? codigo = null)
-        : base(errores.Count > 0 ? string.Join("; ", errores) : "Error de validación.", codigo)
-    {
-        Errores = errores.Count > 0 ? errores : Array.Empty<string>();
+        Errors = errors ?? Array.Empty<string>();
     }
 }

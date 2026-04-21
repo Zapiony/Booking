@@ -1,15 +1,13 @@
 namespace Microservicio.Booking.Business.Exceptions;
 
 /// <summary>
-/// Error de negocio genérico, sin acoplar a códigos HTTP.
+/// Excepción base para errores de negocio controlados.
+/// Toda excepción de negocio debe heredar de esta clase.
+/// La capa API la captura y la traduce a respuestas HTTP apropiadas.
 /// </summary>
 public class BusinessException : Exception
 {
-    public string? Codigo { get; }
-
-    public BusinessException(string mensaje, string? codigo = null, Exception? interna = null)
-        : base(mensaje, interna)
+    public BusinessException(string message) : base(message)
     {
-        Codigo = codigo;
     }
 }
