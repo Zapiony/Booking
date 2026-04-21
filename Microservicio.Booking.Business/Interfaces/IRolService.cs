@@ -36,6 +36,14 @@ public interface IRolService
         Guid usuarioGuid,
         CancellationToken cancellationToken = default);
 
+    /// <summary>
+    /// Retorna el detalle completo de las asignaciones de un usuario,
+    /// incluyendo estado, fecha de asignación y quién la creó.
+    /// </summary>
+    Task<IReadOnlyList<UsuarioRolResponse>> ObtenerAsignacionesDeUsuarioAsync(
+        Guid usuarioGuid,
+        CancellationToken cancellationToken = default);
+
     Task AsignarRolAsync(
         AsignarRolRequest request,
         CancellationToken cancellationToken = default);
