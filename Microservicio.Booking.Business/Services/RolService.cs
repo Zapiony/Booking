@@ -90,7 +90,6 @@ public class RolService : IRolService
         Guid usuarioGuid,
         CancellationToken cancellationToken = default)
     {
-        // Verificar que el usuario existe
         var usuario = await _usuarioDataService
             .ObtenerPorGuidAsync(usuarioGuid, cancellationToken)
             ?? throw new NotFoundException("Usuario", usuarioGuid);
@@ -99,6 +98,22 @@ public class RolService : IRolService
             .ObtenerRolesDeUsuarioAsync(usuario.IdUsuario, cancellationToken);
 
         return roles.Select(RolBusinessMapper.ToResponse).ToList();
+    }
+
+    public async Task<IReadOnlyList<UsuarioRolResponse>> ObtenerAsignacionesDeUsuarioAsync(
+        Guid usuarioGuid,
+        CancellationToken cancellationToken = default)
+    {
+        var usuario = await _usuarioDataService
+            .ObtenerPorGuidAsync(usuarioGuid, cancellationToken)
+            ?? throw new NotFoundException("Usuario", usuarioGuid);
+
+        var asignaciones = await _rolDataService
+            .ObtenerAsignacionesDeUsuarioAsync(usuario.IdUsuario, cancellationToken);
+
+        return asignaciones
+            .Select(RolBusinessMapper.ToUsuarioRolResponse)
+            .ToList();
     }
 
     public async Task AsignarRolAsync(
