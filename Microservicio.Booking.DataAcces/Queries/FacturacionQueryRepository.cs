@@ -22,11 +22,31 @@ public class FacturacionQueryRepository : IFacturacionQueryRepository
     // Consultas paginadas y proyecciones
     // -------------------------------------------------------------------------
 
-    public async Task<PagedResult<FacturacionResumenDto>> ListarFacturacionesAsync(int paginaActual, int tamanoPagina, CancellationToken cancellationToken = default)
+    public async Task<PagedResult<FacturacionResumenDto>> ListarFacturacionesAsync(
+        string? estado, 
+        int? idCliente, 
+        DateTime? fechaInicio, 
+        DateTime? fechaFin, 
+        int paginaActual, 
+        int tamanoPagina, 
+        CancellationToken cancellationToken = default)
     {
-        // El HasQueryFilter de EsEliminado se aplica automáticamente a pesar del AsNoTracking.
-        var query = _context.Facturaciones
-            .AsNoTracking()
+        var queryable = _context.Facturaciones.AsNoTracking();
+
+        // Aplicar filtros funcionales
+        if (!string.IsNullOrWhiteSpace(estado))
+            queryable = queryable.Where(f => f.Estado == estado);
+
+        if (idCliente.HasValue)
+            queryable = queryable.Where(f => f.IdCliente == idCliente.Value);
+
+        if (fechaInicio.HasValue)
+            queryable = queryable.Where(f => f.FechaEmision >= fechaInicio.Value);
+
+        if (fechaFin.HasValue)
+            queryable = queryable.Where(f => f.FechaEmision <= fechaFin.Value);
+
+        var query = queryable
             .OrderByDescending(f => f.FechaRegistroUtc)
             .Select(f => new FacturacionResumenDto(
                 f.GuidFactura,

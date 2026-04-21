@@ -27,6 +27,11 @@ public interface IFacturacionRepository
     /// </summary>
     Task<FacturacionEntity?> ObtenerPorNumeroAsync(string numeroFactura, CancellationToken cancellationToken = default);
 
+    /// <summary>
+    /// Obtiene una facturación por Guid permitiendo el tracking de EF Core para operaciones de actualización.
+    /// </summary>
+    Task<FacturacionEntity?> ObtenerParaActualizarAsync(Guid guidFactura, CancellationToken cancellationToken = default);
+
     // Lecturas paginadas
 
     /// <summary>
