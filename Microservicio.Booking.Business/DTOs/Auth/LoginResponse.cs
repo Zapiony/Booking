@@ -2,8 +2,9 @@
 
 /// <summary>
 /// DTO de salida del proceso de autenticación.
-/// Contiene la información base que la API usará para generar el JWT.
-/// No incluye credenciales ni hash.
+/// Business popula: UsuarioGuid, Username, Correo, Activo, Roles.
+/// La capa API (AuthController) popula: Token y ExpirationUtc
+/// una vez que genera el JWT con JwtSettings.
 /// </summary>
 public class LoginResponse
 {
@@ -16,4 +17,14 @@ public class LoginResponse
     /// Roles activos del usuario. La API los incluirá como claims en el JWT.
     /// </summary>
     public IReadOnlyList<string> Roles { get; set; } = [];
+
+    /// <summary>
+    /// Token JWT generado por AuthController. Business no lo popula.
+    /// </summary>
+    public string? Token { get; set; }
+
+    /// <summary>
+    /// Fecha de expiración del token. La setea AuthController junto con el JWT.
+    /// </summary>
+    public DateTime? ExpirationUtc { get; set; }
 }
