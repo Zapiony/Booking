@@ -19,6 +19,14 @@ public interface IRolDataService
     Task<IReadOnlyList<RolDataModel>> ObtenerTodosLosRolesAsync(
         CancellationToken cancellationToken = default);
 
+    /// <summary>
+    /// Retorna las asignaciones completas usuario-rol, incluyendo estado,
+    /// fecha de creación y quién las creó. Útil para el detalle de permisos.
+    /// </summary>
+    Task<IReadOnlyList<UsuarioRolDataModel>> ObtenerAsignacionesDeUsuarioAsync(
+        int idUsuario,
+        CancellationToken cancellationToken = default);
+
     // -------------------------------------------------------------------------
     // Verificaciones — Rol
     // -------------------------------------------------------------------------
