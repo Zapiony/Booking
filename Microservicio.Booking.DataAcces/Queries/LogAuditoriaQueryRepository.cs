@@ -1,5 +1,6 @@
 using Microservicio.Booking.DataAccess.Common;
 using Microservicio.Booking.DataAccess.Queries.Interfaces;
+using Microservicio.Booking.DataAccess.Context;
 using Microsoft.EntityFrameworkCore;
 
 namespace Microservicio.Booking.DataAccess.Queries;

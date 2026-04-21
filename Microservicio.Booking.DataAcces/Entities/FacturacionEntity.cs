@@ -20,7 +20,6 @@ public class FacturacionEntity
     public int IdCliente { get; set; }
 
     //Referencia a la reserva que genera esta facturación.
-    public int IdReserva { get; set; }
 
     //Referencia al servicio facturado.
     public int IdServicio { get; set; }
@@ -38,7 +37,7 @@ public class FacturacionEntity
     public decimal ValorIva { get; set; }
 
     //Valor total de otros impuestos aplicados.
-    public decimal Impuestos { get; set; }
+    // NOTE: la columna "impuestos" no existe en la tabla booking.facturacion; se elimina de la entidad.
 
     //Valor total final a pagar.
     public decimal Total { get; set; }
@@ -46,8 +45,8 @@ public class FacturacionEntity
     //Observaciones de la factura.
     public string? ObservacionesFactura { get; set; }
 
-    //Origen del canal de factura.
-    public string OrigenCanalFactura { get; set; } = string.Empty;
+    //Origen del canal de factura. Nullable en BD.
+    public string? OrigenCanalFactura { get; set; } = null;
 
     // Estado y ciclo de vida
 
@@ -63,8 +62,8 @@ public class FacturacionEntity
     
     // Auditoría
 
-    //Usuario que creó el registro.
-    public string? CreadoPorUsuario { get; set; }
+    //Usuario que creó el registro. NOT NULL en BD.
+    public string CreadoPorUsuario { get; set; }
 
     //Fecha de creación en UTC. Tipo TIMESTAMPTZ en PostgreSQL.
     public DateTimeOffset FechaRegistroUtc { get; set; }
@@ -78,8 +77,8 @@ public class FacturacionEntity
     //IP desde donde se realizó la última modificación.
     public string? ModificacionIp { get; set; }
 
-    //Nombre del microservicio o canal de origen.
-    public string? ServicioOrigen { get; set; }
+    //Nombre del microservicio o canal de origen. NOT NULL en BD.
+    public string ServicioOrigen { get; set; }
 
     // Navegación
 

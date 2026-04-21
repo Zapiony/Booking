@@ -33,9 +33,6 @@ public class FacturacionConfiguration : IEntityTypeConfiguration<FacturacionEnti
             .HasColumnName("id_cliente")
             .IsRequired();
 
-        builder.Property(e => e.IdReserva)
-            .HasColumnName("id_reserva")
-            .IsRequired();
 
         builder.Property(e => e.IdServicio)
             .HasColumnName("id_servicio")
@@ -48,7 +45,7 @@ public class FacturacionConfiguration : IEntityTypeConfiguration<FacturacionEnti
 
         builder.Property(e => e.FechaEmision)
             .HasColumnName("fecha_emision")
-            .HasColumnType("date")
+            .HasColumnType("timestamp without time zone")
             .IsRequired();
 
         builder.Property(e => e.Subtotal)
@@ -61,10 +58,7 @@ public class FacturacionConfiguration : IEntityTypeConfiguration<FacturacionEnti
             .HasColumnType("numeric(12,2)")
             .IsRequired();
 
-        builder.Property(e => e.Impuestos)
-            .HasColumnName("impuestos")
-            .HasColumnType("numeric(12,2)")
-            .IsRequired();
+        // La columna "impuestos" no existe en la tabla booking.facturacion — no se mapea aquí.
 
         builder.Property(e => e.Total)
             .HasColumnName("total")
@@ -78,7 +72,7 @@ public class FacturacionConfiguration : IEntityTypeConfiguration<FacturacionEnti
         builder.Property(e => e.OrigenCanalFactura)
             .HasColumnName("origen_canal_factura")
             .HasMaxLength(100)
-            .IsRequired();
+            .IsRequired(false);
 
         // [3] Estado y ciclo de vida
         builder.Property(e => e.Estado)
@@ -103,7 +97,8 @@ public class FacturacionConfiguration : IEntityTypeConfiguration<FacturacionEnti
         // [4] Auditoría
         builder.Property(e => e.CreadoPorUsuario)
             .HasColumnName("creado_por_usuario")
-            .HasMaxLength(150);
+            .HasMaxLength(150)
+            .IsRequired();
 
         builder.Property(e => e.FechaRegistroUtc)
             .HasColumnName("fecha_registro_utc")
@@ -125,7 +120,8 @@ public class FacturacionConfiguration : IEntityTypeConfiguration<FacturacionEnti
 
         builder.Property(e => e.ServicioOrigen)
             .HasColumnName("servicio_origen")
-            .HasMaxLength(100);
+            .HasMaxLength(100)
+            .IsRequired();
 
         // Restricciones UNIQUE
         builder.HasIndex(e => e.GuidFactura)
