@@ -47,7 +47,14 @@ public class FacturacionDataService : IFacturacionDataService
 
     public async Task<DataPagedResult<FacturacionDataModel>> BuscarAsync(FacturacionFiltroDataModel filtro, CancellationToken cancellationToken = default)
     {
-        var resultado = await _unitOfWork.FacturacionQueryRepository.ListarFacturacionesAsync(filtro.PaginaActual, filtro.TamanioPagina, cancellationToken);
+        var resultado = await _unitOfWork.FacturacionQueryRepository.ListarFacturacionesAsync(
+            filtro.Estado, 
+            filtro.IdCliente, 
+            filtro.FechaEmisionInicio, 
+            filtro.FechaEmisionFin, 
+            filtro.PaginaActual, 
+            filtro.TamanioPagina, 
+            cancellationToken);
 
         return new DataPagedResult<FacturacionDataModel>
         {
@@ -79,7 +86,7 @@ public class FacturacionDataService : IFacturacionDataService
 
     public async Task<FacturacionDataModel?> ActualizarAsync(FacturacionDataModel model, CancellationToken cancellationToken = default)
     {
-        var entity = await _unitOfWork.FacturacionRepository.ObtenerPorGuidAsync(model.GuidFactura, cancellationToken);
+        var entity = await _unitOfWork.FacturacionRepository.ObtenerParaActualizarAsync(model.GuidFactura, cancellationToken);
         if (entity is null) return null;
 
         entity.IdCliente = model.IdCliente;
@@ -106,7 +113,7 @@ public class FacturacionDataService : IFacturacionDataService
 
     public async Task<bool> EliminarLogicoAsync(Guid guidFactura, string eliminadoPorUsuario, CancellationToken cancellationToken = default)
     {
-        var entity = await _unitOfWork.FacturacionRepository.ObtenerPorGuidAsync(guidFactura, cancellationToken);
+        var entity = await _unitOfWork.FacturacionRepository.ObtenerParaActualizarAsync(guidFactura, cancellationToken);
         if (entity is null) return false;
 
         _unitOfWork.FacturacionRepository.EliminarLogico(entity);
