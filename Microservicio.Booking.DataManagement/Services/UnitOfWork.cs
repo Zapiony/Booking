@@ -3,9 +3,7 @@ using Microservicio.Booking.DataAccess.Queries;
 using Microservicio.Booking.DataAccess.Repositories;
 using Microservicio.Booking.DataAccess.Repositories.Interfaces;
 using Microservicio.Booking.DataManagement.Interfaces;
-using Microservicio.Servicios.DataAccess.Queries;
-using Microservicio.Servicios.DataAccess.Repositories;
-using Microservicio.Servicios.DataAccess.Repositories.Interfaces;
+
 
 public class UnitOfWork : IUnitOfWork
 {
