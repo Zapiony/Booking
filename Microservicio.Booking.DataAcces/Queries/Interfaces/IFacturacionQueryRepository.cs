@@ -11,7 +11,7 @@ namespace Microservicio.Booking.DataAccess.Queries.Interfaces;
 /// Incluye los totales y estado sin exponer información interna de la base.
 /// </summary>
 public sealed record FacturacionResumenDto(
-    Guid GuidFacturacion,
+    Guid GuidFactura,
     string NumeroFactura,
     decimal Total,
     string Estado,
@@ -37,5 +37,5 @@ public interface IFacturacionQueryRepository
     /// Retorna el resumen de una facturación específica por su GUID público.
     /// Retorna null si no existe o está eliminada lógicamente.
     /// </summary>
-    Task<FacturacionResumenDto?> ObtenerResumenPorGuidAsync(Guid guidFacturacion, CancellationToken cancellationToken = default);
+    Task<FacturacionResumenDto?> ObtenerResumenPorGuidAsync(Guid guidFactura, CancellationToken cancellationToken = default);
 }

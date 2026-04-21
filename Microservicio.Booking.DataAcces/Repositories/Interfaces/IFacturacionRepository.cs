@@ -15,12 +15,12 @@ public interface IFacturacionRepository
     /// <summary>
     /// Obtiene una facturación mediante su identificador interno.
     /// </summary>
-    Task<FacturacionEntity?> ObtenerPorIdAsync(int idFacturacion, CancellationToken cancellationToken = default);
+    Task<FacturacionEntity?> ObtenerPorIdAsync(int idFactura, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Obtiene una facturación mediante su identificador público (Guid).
     /// </summary>
-    Task<FacturacionEntity?> ObtenerPorGuidAsync(Guid guidFacturacion, CancellationToken cancellationToken = default);
+    Task<FacturacionEntity?> ObtenerPorGuidAsync(Guid guidFactura, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Obtiene una facturación mediante su número único.

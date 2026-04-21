@@ -21,27 +21,23 @@ public class FacturacionRepository : IFacturacionRepository
     }
 
     // -------------------------------------------------------------------------
-    // Query base reutilizable — filtra eliminados lógicos en un solo lugar
+    // Query base reutilizable (El filtro lógico ya es manejado por EF QueryFilter)
     // -------------------------------------------------------------------------
 
-    /// <summary>
-    /// Punto de partida para todas las consultas de facturación.
-    /// Excluye registros con borrado lógico aplicado (es_eliminado = true).
-    /// </summary>
-    private IQueryable<FacturacionEntity> QueryVigentes => _context.Facturaciones.Where(f => !f.EsEliminado);
+    private IQueryable<FacturacionEntity> QueryVigentes => _context.Facturaciones;
 
     // -------------------------------------------------------------------------
     // Lecturas simples
     // -------------------------------------------------------------------------
 
-    public async Task<FacturacionEntity?> ObtenerPorIdAsync(int idFacturacion, CancellationToken cancellationToken = default)
+    public async Task<FacturacionEntity?> ObtenerPorIdAsync(int idFactura, CancellationToken cancellationToken = default)
     {
-        return await QueryVigentes.FirstOrDefaultAsync(f => f.IdFacturacion == idFacturacion, cancellationToken);
+        return await QueryVigentes.FirstOrDefaultAsync(f => f.IdFactura == idFactura, cancellationToken);
     }
 
-    public async Task<FacturacionEntity?> ObtenerPorGuidAsync(Guid guidFacturacion, CancellationToken cancellationToken = default)
+    public async Task<FacturacionEntity?> ObtenerPorGuidAsync(Guid guidFactura, CancellationToken cancellationToken = default)
     {
-        return await QueryVigentes.FirstOrDefaultAsync(f => f.GuidFacturacion == guidFacturacion, cancellationToken);
+        return await QueryVigentes.FirstOrDefaultAsync(f => f.GuidFactura == guidFactura, cancellationToken);
     }
 
     public async Task<FacturacionEntity?> ObtenerPorNumeroAsync(string numeroFactura, CancellationToken cancellationToken = default)
@@ -55,7 +51,7 @@ public class FacturacionRepository : IFacturacionRepository
 
     public async Task<PagedResult<FacturacionEntity>> ObtenerTodosPaginadoAsync(int paginaActual, int tamanioPagina, CancellationToken cancellationToken = default)
     {
-        var query = QueryVigentes.OrderBy(f => f.IdFacturacion);
+        var query = QueryVigentes.OrderBy(f => f.IdFactura);
         var totalRegistros = await query.CountAsync(cancellationToken);
 
         if (totalRegistros == 0)

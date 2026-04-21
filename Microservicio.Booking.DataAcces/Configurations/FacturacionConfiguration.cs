@@ -16,14 +16,14 @@ public class FacturacionConfiguration : IEntityTypeConfiguration<FacturacionEnti
         builder.ToTable("facturacion", "booking");
 
         // [1] Clave primaria e identificación
-        builder.HasKey(e => e.IdFacturacion);
+        builder.HasKey(e => e.IdFactura);
 
-        builder.Property(e => e.IdFacturacion)
-            .HasColumnName("id_facturacion")
+        builder.Property(e => e.IdFactura)
+            .HasColumnName("id_factura")
             .ValueGeneratedOnAdd();
 
-        builder.Property(e => e.GuidFacturacion)
-            .HasColumnName("guid_facturacion")
+        builder.Property(e => e.GuidFactura)
+            .HasColumnName("guid_factura")
             .HasColumnType("uuid")
             .HasDefaultValueSql("gen_random_uuid()")
             .IsRequired();
@@ -37,37 +37,68 @@ public class FacturacionConfiguration : IEntityTypeConfiguration<FacturacionEnti
             .HasColumnName("id_reserva")
             .IsRequired();
 
+        builder.Property(e => e.IdServicio)
+            .HasColumnName("id_servicio")
+            .IsRequired();
+
         builder.Property(e => e.NumeroFactura)
             .HasColumnName("numero_factura")
             .HasMaxLength(50)
             .IsRequired();
 
+        builder.Property(e => e.FechaEmision)
+            .HasColumnName("fecha_emision")
+            .HasColumnType("date")
+            .IsRequired();
+
         builder.Property(e => e.Subtotal)
             .HasColumnName("subtotal")
-            .HasColumnType("decimal(18,2)")
+            .HasColumnType("numeric(12,2)")
+            .IsRequired();
+
+        builder.Property(e => e.ValorIva)
+            .HasColumnName("valor_iva")
+            .HasColumnType("numeric(12,2)")
             .IsRequired();
 
         builder.Property(e => e.Impuestos)
             .HasColumnName("impuestos")
-            .HasColumnType("decimal(18,2)")
+            .HasColumnType("numeric(12,2)")
             .IsRequired();
 
         builder.Property(e => e.Total)
             .HasColumnName("total")
-            .HasColumnType("decimal(18,2)")
+            .HasColumnType("numeric(12,2)")
+            .IsRequired();
+
+        builder.Property(e => e.ObservacionesFactura)
+            .HasColumnName("observaciones_factura")
+            .HasColumnType("text");
+
+        builder.Property(e => e.OrigenCanalFactura)
+            .HasColumnName("origen_canal_factura")
+            .HasMaxLength(100)
             .IsRequired();
 
         // [3] Estado y ciclo de vida
         builder.Property(e => e.Estado)
             .HasColumnName("estado")
             .HasColumnType("char(3)")
-            .HasDefaultValue("ACT")
+            .HasDefaultValue("ABI")
             .IsRequired();
 
         builder.Property(e => e.EsEliminado)
             .HasColumnName("es_eliminado")
             .HasDefaultValue(false)
             .IsRequired();
+
+        builder.Property(e => e.FechaInhabilitacionUtc)
+            .HasColumnName("fecha_inhabilitacion_utc")
+            .HasColumnType("timestamptz");
+
+        builder.Property(e => e.MotivoInhabilitacion)
+            .HasColumnName("motivo_inhabilitacion")
+            .HasMaxLength(255);
 
         // [4] Auditoría
         builder.Property(e => e.CreadoPorUsuario)
@@ -97,7 +128,7 @@ public class FacturacionConfiguration : IEntityTypeConfiguration<FacturacionEnti
             .HasMaxLength(100);
 
         // Restricciones UNIQUE
-        builder.HasIndex(e => e.GuidFacturacion)
+        builder.HasIndex(e => e.GuidFactura)
             .IsUnique()
             .HasDatabaseName("uq_facturacion_guid");
 

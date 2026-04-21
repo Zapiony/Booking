@@ -23,12 +23,12 @@ public class FacturacionQueryRepository : IFacturacionQueryRepository
 
     public async Task<PagedResult<FacturacionResumenDto>> ListarFacturacionesAsync(int paginaActual, int tamanoPagina, CancellationToken cancellationToken = default)
     {
+        // El HasQueryFilter de EsEliminado se aplica automáticamente a pesar del AsNoTracking.
         var query = _context.Facturaciones
-            .AsNoTracking() // Optimización crucial para lecturas
-            .Where(f => !f.EsEliminado)
+            .AsNoTracking()
             .OrderByDescending(f => f.FechaRegistroUtc)
             .Select(f => new FacturacionResumenDto(
-                f.GuidFacturacion,
+                f.GuidFactura,
                 f.NumeroFactura,
                 f.Total,
                 f.Estado,
@@ -52,13 +52,13 @@ public class FacturacionQueryRepository : IFacturacionQueryRepository
     // Consultas individuales
     // -------------------------------------------------------------------------
 
-    public async Task<FacturacionResumenDto?> ObtenerResumenPorGuidAsync(Guid guidFacturacion, CancellationToken cancellationToken = default)
+    public async Task<FacturacionResumenDto?> ObtenerResumenPorGuidAsync(Guid guidFactura, CancellationToken cancellationToken = default)
     {
         return await _context.Facturaciones
             .AsNoTracking()
-            .Where(f => !f.EsEliminado && f.GuidFacturacion == guidFacturacion)
+            .Where(f => f.GuidFactura == guidFactura)
             .Select(f => new FacturacionResumenDto(
-                f.GuidFacturacion,
+                f.GuidFactura,
                 f.NumeroFactura,
                 f.Total,
                 f.Estado,
