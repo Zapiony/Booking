@@ -17,10 +17,10 @@ public class BookingDbContext : DbContext
     public DbSet<ClienteEntity> Clientes => Set<ClienteEntity>();
     public DbSet<TipoServicioEntity> TiposServicio => Set<TipoServicioEntity>();
     public DbSet<ServicioEntity> Servicios => Set<ServicioEntity>();
-    public DbSet<FacturacionEntity> Facturaciones => Set<FacturacionEntity>();
+    //public DbSet<FacturacionEntity> Facturaciones => Set<FacturacionEntity>();
 
     // Trazabilidad
-    public DbSet<LogAuditoriaEntity> LogsAuditoria => Set<LogAuditoriaEntity>();
+    //public DbSet<LogAuditoriaEntity> LogsAuditoria => Set<LogAuditoriaEntity>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
