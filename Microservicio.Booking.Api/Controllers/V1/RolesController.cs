@@ -33,7 +33,7 @@ public class RolesController : ControllerBase
     /// Lista todos los roles activos del sistema.
     /// </summary>
     [HttpGet]
-    [Authorize(Roles = "ADMINISTRADOR,VENDEDOR")]
+    [Authorize(Roles = "ADMINISTRADOR")]
     [ProducesResponseType(typeof(ApiResponse<IReadOnlyList<RolResponse>>), StatusCodes.Status200OK)]
     public async Task<IActionResult> ObtenerTodos(CancellationToken cancellationToken)
     {
@@ -45,7 +45,7 @@ public class RolesController : ControllerBase
     /// Obtiene un rol por su GUID público.
     /// </summary>
     [HttpGet("{rolGuid:guid}")]
-    [Authorize(Roles = "ADMINISTRADOR,VENDEDOR")]
+    [Authorize(Roles = "ADMINISTRADOR")]
     [ProducesResponseType(typeof(ApiResponse<RolResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> ObtenerPorGuid(
@@ -102,7 +102,7 @@ public class RolesController : ControllerBase
     /// Lista los roles asignados a un usuario específico.
     /// </summary>
     [HttpGet("usuario/{usuarioGuid:guid}")]
-    [Authorize(Roles = "ADMINISTRADOR")]
+    [Authorize(Roles = "ADMINISTRADOR,VENDEDOR,CLIENTE")]
     [ProducesResponseType(typeof(ApiResponse<IReadOnlyList<RolResponse>>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> ObtenerRolesDeUsuario(
@@ -117,7 +117,7 @@ public class RolesController : ControllerBase
     /// Lista el detalle completo de asignaciones usuario-rol (estado, fecha, auditoría).
     /// </summary>
     [HttpGet("usuario/{usuarioGuid:guid}/asignaciones")]
-    [Authorize(Roles = "ADMINISTRADOR")]
+    [Authorize(Roles = "ADMINISTRADOR,VENDEDOR")]
     [ProducesResponseType(typeof(ApiResponse<IReadOnlyList<UsuarioRolResponse>>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> ObtenerAsignacionesDeUsuario(

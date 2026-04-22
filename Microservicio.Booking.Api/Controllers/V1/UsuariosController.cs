@@ -34,7 +34,7 @@ public class UsuariosController : ControllerBase
     /// Obtiene un usuario por su GUID público.
     /// </summary>
     [HttpGet("{usuarioGuid:guid}")]
-    [Authorize(Roles = "ADMINISTRADOR,VENDEDOR")]
+    [Authorize(Roles = "ADMINISTRADOR,VENDEDOR,CLIENTE")]
     [ProducesResponseType(typeof(ApiResponse<UsuarioResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> ObtenerPorGuid(
@@ -53,7 +53,7 @@ public class UsuariosController : ControllerBase
     /// Búsqueda paginada de usuarios con filtros opcionales.
     /// </summary>
     [HttpPost("buscar")]
-    [Authorize(Roles = "ADMINISTRADOR")]
+    [Authorize(Roles = "ADMINISTRADOR,VENDEDOR")]
     [ProducesResponseType(typeof(ApiResponse<DataPagedResult<UsuarioResponse>>), StatusCodes.Status200OK)]
     public async Task<IActionResult> Buscar(
         [FromBody] UsuarioFiltroRequest filtro,
@@ -97,7 +97,7 @@ public class UsuariosController : ControllerBase
     /// Actualiza username y correo de un usuario existente.
     /// </summary>
     [HttpPut("{usuarioGuid:guid}")]
-    [Authorize(Roles = "ADMINISTRADOR")]
+    [Authorize(Roles = "ADMINISTRADOR,VENDEDOR,CLIENTE")]
     [ProducesResponseType(typeof(ApiResponse<UsuarioResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status404NotFound)]

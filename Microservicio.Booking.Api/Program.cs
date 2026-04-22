@@ -3,6 +3,8 @@ using Microservicio.Booking.Api.Extensions;
 using Microservicio.Booking.Api.Middleware;
 using Microservicio.Booking.Api.Models.Settings;
 
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
@@ -14,6 +16,32 @@ builder.Services.AddBookingApplicationServices(builder.Configuration);
 
 builder.Services.AddRazorPages();
 
+<<<<<<< feat/DataAccess_Servicios
+=======
+// -------------------------------------------------------------------------
+// Configuraciones transversales
+// -------------------------------------------------------------------------
+builder.Services.AddCustomApiVersioning();
+builder.Services.AddCustomCors(builder.Configuration);
+builder.Services.AddCustomAuthentication(builder.Configuration);
+builder.Services.AddCustomSwagger();
+builder.Services.AddAuthorization();
+
+// -------------------------------------------------------------------------
+// Módulos de negocio
+// Cada módulo del equipo registra sus propios servicios aquí.
+// -------------------------------------------------------------------------
+builder.Services.AddUsuariosModule(builder.Configuration);
+
+// TODO: otros módulos del equipo se agregan aquí:
+builder.Services.AddClientesModule();
+// builder.Services.AddFacturacionModule(builder.Configuration);
+// builder.Services.AddServiciosModule(builder.Configuration);
+
+// -------------------------------------------------------------------------
+// Pipeline HTTP
+// -------------------------------------------------------------------------
+>>>>>>> master
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();

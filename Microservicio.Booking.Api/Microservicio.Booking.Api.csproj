@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup>
 		<TargetFramework>net10.0</TargetFramework>
@@ -28,6 +28,7 @@
 		<ProjectReference Include="..\Microservicio.Booking.Business\Microservicio.Booking.Business.csproj" />
 		<ProjectReference Include="..\Microservicio.Booking.DataAcces\Microservicio.Booking.DataAcces.csproj" />
 		<ProjectReference Include="..\Microservicio.Booking.DataManagement\Microservicio.Booking.DataManagement.csproj" />
+<<<<<<< feat/DataAccess_Servicios
 	</ItemGroup>
 
 	<ItemGroup>
@@ -35,6 +36,8 @@
 		<Compile Remove="Controllers\V1\RolesController.cs" />
 		<Compile Remove="Controllers\V1\UsuariosController.cs" />
 		<Compile Remove="Extensions\UsuariosServiceExtensions.cs" />
+=======
+>>>>>>> master
 	</ItemGroup>
 
 </Project>
