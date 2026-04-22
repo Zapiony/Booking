@@ -57,6 +57,8 @@ public class UsuarioRepository : IUsuarioRepository
         CancellationToken cancellationToken = default)
     {
         return await QueryVigentes
+            .Include(u => u.UsuariosRoles.Where(ur => !ur.EsEliminado && ur.Activo))
+                .ThenInclude(ur => ur.Rol)
             .FirstOrDefaultAsync(
                 u => u.Username == username,
                 cancellationToken);

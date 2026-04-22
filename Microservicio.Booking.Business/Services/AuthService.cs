@@ -55,7 +55,6 @@ public class AuthService : IAuthService
         using var hmac = new System.Security.Cryptography.HMACSHA256(saltBytes);
         var computedHash = Convert.ToBase64String(
             hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password)));
-
         return computedHash == storedHash;
     }
 }
