@@ -1,5 +1,5 @@
 using Microservicio.Booking.DataManagement.Models;
-using Microservicio.Servicios.DataAccess.Entities;
+using Microservicio.Booking.DataAccess.Entities;
 
 namespace Microservicio.Booking.DataManagement.Mappers;
 
@@ -22,8 +22,7 @@ public static class TipoServicioDataMapper
             ModificadoPorUsuario = entidad.ModificadoPorUsuario,
             FechaModificacionUtc = entidad.FechaModificacionUtc,
             ModificacionIp = entidad.ModificacionIp,
-            ServicioOrigen = entidad.ServicioOrigen,
-            RowVersion = entidad.RowVersion
+            ServicioOrigen = entidad.ServicioOrigen
         };
 
     public static TipoServicioEntity ANuevaEntidad(TipoServicioDataModel modelo) =>

@@ -1,8 +1,8 @@
 using Microservicio.Booking.DataManagement.Interfaces;
 using Microservicio.Booking.DataManagement.Mappers;
 using Microservicio.Booking.DataManagement.Models;
-using Microservicio.Servicios.DataAccess.Entities;
-using Microservicio.Servicios.DataAccess.Queries;
+using Microservicio.Booking.DataAccess.Entities;
+using Microservicio.Booking.DataAccess.Queries;
 
 namespace Microservicio.Booking.DataManagement.Services;
 
@@ -20,33 +20,33 @@ public sealed class ServicioDataService : IServicioDataService
 
     public async Task<ServicioDataModel?> ObtenerPorIdAsync(int idServicio, CancellationToken cancellationToken = default)
     {
-        var entidad = await _uow.Servicios.ObtenerPorIdAsync(idServicio, cancellationToken);
+        var entidad = await _uow.ServicioRepository.ObtenerPorIdAsync(idServicio, cancellationToken);
         if (entidad is null)
             return null;
 
-        var tipo = await _uow.TiposServicio.ObtenerPorIdAsync(entidad.IdTipoServicio, cancellationToken);
+        var tipo = await _uow.TipoServicioRepository.ObtenerPorIdAsync(entidad.IdTipoServicio, cancellationToken);
         return ServicioDataMapper.AModelo(entidad, tipo);
     }
 
     public async Task<ServicioDataModel?> ObtenerPorGuidAsync(Guid guidServicio, CancellationToken cancellationToken = default)
     {
-        var entidad = await _uow.Servicios.ObtenerPorGuidAsync(guidServicio, cancellationToken);
+        var entidad = await _uow.ServicioRepository.ObtenerPorGuidAsync(guidServicio, cancellationToken);
         if (entidad is null)
             return null;
 
-        var tipo = await _uow.TiposServicio.ObtenerPorIdAsync(entidad.IdTipoServicio, cancellationToken);
+        var tipo = await _uow.TipoServicioRepository.ObtenerPorIdAsync(entidad.IdTipoServicio, cancellationToken);
         return ServicioDataMapper.AModelo(entidad, tipo);
     }
 
     public async Task<ServicioDataModel?> ObtenerConTipoPorGuidAsync(Guid guidServicio, CancellationToken cancellationToken = default)
     {
-        var entidad = await _uow.Servicios.ObtenerConTipoServicioPorGuidAsync(guidServicio, cancellationToken);
+        var entidad = await _uow.ServicioRepository.ObtenerConTipoServicioPorGuidAsync(guidServicio, cancellationToken);
         return entidad is null ? null : ServicioDataMapper.AModelo(entidad);
     }
 
     public async Task<ServicioDataModel?> ObtenerDetallePorGuidAsync(Guid guidServicio, CancellationToken cancellationToken = default)
     {
-        var dto = await _uow.ConsultasServicio.ObtenerDetalleAsync(guidServicio, cancellationToken);
+        var dto = await _uow.ServicioQueryRepository.ObtenerDetalleAsync(guidServicio, cancellationToken);
         return dto is null ? null : ServicioDataMapper.AModeloDesdeDetalle(dto);
     }
 
@@ -63,7 +63,7 @@ public sealed class ServicioDataService : IServicioDataService
 
         if (!tieneTermino && !tieneTipo)
         {
-            var r = await _uow.ConsultasServicio.ListarServiciosAsync(
+            var r = await _uow.ServicioQueryRepository.ListarServiciosAsync(
                 filtro.PaginaActual,
                 filtro.TamanoPagina,
                 cancellationToken);
@@ -72,7 +72,7 @@ public sealed class ServicioDataService : IServicioDataService
 
         if (tieneTermino && !tieneTipo)
         {
-            var r = await _uow.ConsultasServicio.BuscarServiciosAsync(
+            var r = await _uow.ServicioQueryRepository.BuscarServiciosAsync(
                 filtro.Termino!.Trim(),
                 filtro.PaginaActual,
                 filtro.TamanoPagina,
@@ -80,7 +80,7 @@ public sealed class ServicioDataService : IServicioDataService
             return DataPagedResult<ServicioResumenDataModel>.DesdeDal(r, ServicioDataMapper.AResumen);
         }
 
-        var listaTipo = await _uow.ConsultasServicio.ListarServiciosPorTipoAsync(
+        var listaTipo = await _uow.ServicioQueryRepository.ListarServiciosPorTipoAsync(
             filtro.GuidTipoServicio!.Value,
             cancellationToken);
 
@@ -120,12 +120,12 @@ public sealed class ServicioDataService : IServicioDataService
         ArgumentOutOfRangeException.ThrowIfLessThan(paginaActual, 1, nameof(paginaActual));
         ArgumentOutOfRangeException.ThrowIfLessThan(tamanoPagina, 1, nameof(tamanoPagina));
 
-        var p = await _uow.Servicios.ObtenerTodosPaginadoAsync(paginaActual, tamanoPagina, cancellationToken);
+        var p = await _uow.ServicioRepository.ObtenerTodosPaginadoAsync(paginaActual, tamanoPagina, cancellationToken);
 
         var modelos = new List<ServicioDataModel>(p.Items.Count);
         foreach (var entidad in p.Items)
         {
-            var tipo = await _uow.TiposServicio.ObtenerPorIdAsync(entidad.IdTipoServicio, cancellationToken);
+            var tipo = await _uow.TipoServicioRepository.ObtenerPorIdAsync(entidad.IdTipoServicio, cancellationToken);
             modelos.Add(ServicioDataMapper.AModelo(entidad, tipo));
         }
 
@@ -139,7 +139,7 @@ public sealed class ServicioDataService : IServicioDataService
         var tipo = await ResolverTipoAsync(modelo, cancellationToken)
             ?? throw new InvalidOperationException("No se encontró el tipo de servicio indicado.");
 
-        if (await _uow.Servicios.ExisteIdentificacionAsync(
+        if (await _uow.ServicioRepository.ExisteIdentificacionAsync(
                 modelo.TipoIdentificacion,
                 modelo.NumeroIdentificacion,
                 cancellationToken))
@@ -148,7 +148,7 @@ public sealed class ServicioDataService : IServicioDataService
         }
 
         var entidad = ServicioDataMapper.ANuevaEntidad(modelo, tipo.IdTipoServicio);
-        await _uow.Servicios.AgregarAsync(entidad, cancellationToken);
+        await _uow.ServicioRepository.AgregarAsync(entidad, cancellationToken);
         await _uow.SaveChangesAsync(cancellationToken);
 
         return ServicioDataMapper.AModelo(entidad, tipo);
@@ -158,7 +158,7 @@ public sealed class ServicioDataService : IServicioDataService
     {
         ArgumentNullException.ThrowIfNull(modelo);
 
-        var entidad = await _uow.Servicios.ObtenerConTipoServicioPorGuidAsync(modelo.GuidServicio, cancellationToken)
+        var entidad = await _uow.ServicioRepository.ObtenerConTipoServicioPorGuidAsync(modelo.GuidServicio, cancellationToken)
             ?? throw new InvalidOperationException("No se encontró el servicio a actualizar.");
 
         var tipoDestino = await ResolverTipoAsync(modelo, cancellationToken);
@@ -166,19 +166,19 @@ public sealed class ServicioDataService : IServicioDataService
             modelo.IdTipoServicio = tipoDestino.IdTipoServicio;
 
         ServicioDataMapper.AplicarCambios(entidad, modelo);
-        _uow.Servicios.Actualizar(entidad);
+        _uow.ServicioRepository.Actualizar(entidad);
         await _uow.SaveChangesAsync(cancellationToken);
 
-        var tipo = await _uow.TiposServicio.ObtenerPorIdAsync(entidad.IdTipoServicio, cancellationToken);
+        var tipo = await _uow.TipoServicioRepository.ObtenerPorIdAsync(entidad.IdTipoServicio, cancellationToken);
         return ServicioDataMapper.AModelo(entidad, tipo);
     }
 
     public async Task EliminarLogicoAsync(Guid guidServicio, CancellationToken cancellationToken = default)
     {
-        var entidad = await _uow.Servicios.ObtenerPorGuidAsync(guidServicio, cancellationToken)
+        var entidad = await _uow.ServicioRepository.ObtenerPorGuidAsync(guidServicio, cancellationToken)
             ?? throw new InvalidOperationException("No se encontró el servicio a eliminar.");
 
-        _uow.Servicios.EliminarLogico(entidad);
+        _uow.ServicioRepository.EliminarLogico(entidad);
         await _uow.SaveChangesAsync(cancellationToken);
     }
 
@@ -187,10 +187,10 @@ public sealed class ServicioDataService : IServicioDataService
         CancellationToken cancellationToken)
     {
         if (modelo.GuidTipoServicio != Guid.Empty)
-            return await _uow.TiposServicio.ObtenerPorGuidAsync(modelo.GuidTipoServicio, cancellationToken);
+            return await _uow.TipoServicioRepository.ObtenerPorGuidAsync(modelo.GuidTipoServicio, cancellationToken);
 
         if (modelo.IdTipoServicio > 0)
-            return await _uow.TiposServicio.ObtenerPorIdAsync(modelo.IdTipoServicio, cancellationToken);
+            return await _uow.TipoServicioRepository.ObtenerPorIdAsync(modelo.IdTipoServicio, cancellationToken);
 
         return null;
     }

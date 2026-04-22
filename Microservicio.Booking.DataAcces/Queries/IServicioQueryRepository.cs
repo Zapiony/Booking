@@ -1,6 +1,6 @@
 using Microservicio.Booking.DataAccess.Common;
 
-namespace Microservicio.Servicios.DataAccess.Queries;
+namespace Microservicio.Booking.DataAccess.Queries;
 
 // =============================================================================
 // DTOs de proyección — contratos de solo lectura propios de la DAL.

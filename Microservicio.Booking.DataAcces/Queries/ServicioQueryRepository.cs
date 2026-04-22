@@ -1,4 +1,3 @@
-using Microservicio.Booking.DataAccess.Repositories.Interfaces;
 using Microservicio.Booking.DataAccess.Common;
 using Microservicio.Booking.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -102,13 +101,9 @@ public class ServicioQueryRepository : IServicioQueryRepository
     {
         var terminoNormalizado = termino.Trim();
         var patron = $"%{terminoNormalizado}%";
-        var terminoNormalizado = termino.Trim();
-        var patron = $"%{terminoNormalizado}%";
 
         var query = QueryVigentes
             .Where(s =>
-                EF.Functions.ILike(s.RazonSocial, patron) ||
-                (s.NombreComercial != null && EF.Functions.ILike(s.NombreComercial, patron)))
                 EF.Functions.ILike(s.RazonSocial, patron) ||
                 (s.NombreComercial != null && EF.Functions.ILike(s.NombreComercial, patron)))
             .OrderBy(s => s.RazonSocial);
