@@ -1,4 +1,5 @@
 using Microservicio.Booking.DataAccess.Queries;
+using Microservicio.Booking.DataAccess.Queries.Interfaces;
 using Microservicio.Booking.DataAccess.Repositories.Interfaces;
 namespace Microservicio.Booking.DataManagement.Interfaces;
 
