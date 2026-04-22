@@ -76,21 +76,22 @@ public class ClienteService : IClienteService
     }
 
     public async Task<DataPagedResult<ClienteResponse>> BuscarAsync(
-        ClienteFiltroRequest request,
-        CancellationToken cancellationToken = default)
+    ClienteFiltroRequest request,
+    CancellationToken cancellationToken = default)
     {
         var filtro = ClienteBusinessMapper.ToFiltroDataModel(request);
 
         var resultado = await _clienteDataService
             .BuscarAsync(filtro, cancellationToken);
 
-        return new DataPagedResult<ClienteResponse>
-        {
-            Items = ClienteBusinessMapper.ToResponseList(resultado.Items),
-            PageNumber = resultado.PageNumber,
-            PageSize = resultado.PageSize,
-            TotalRecords = resultado.TotalRecords
-        };
+        // ✅ CORRECTO — constructor con propiedades en español
+        var items = ClienteBusinessMapper.ToResponseList(resultado.Items);
+
+        return new DataPagedResult<ClienteResponse>(
+            items,
+            resultado.TotalRegistros,
+            resultado.PaginaActual,
+            resultado.TamanoPagina);
     }
 
     // =========================================================================

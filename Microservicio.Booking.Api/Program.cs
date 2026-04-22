@@ -1,28 +1,22 @@
-using Asp.Versioning.ApiExplorer;
 using Microservicio.Booking.Api.Extensions;
 using Microservicio.Booking.Api.Middleware;
-using Microservicio.Booking.Api.Models.Settings;
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 var builder = WebApplication.CreateBuilder(args);
 
+// -------------------------------------------------------------------------
+// Servicios base
+// -------------------------------------------------------------------------
+Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
+
 builder.Services.AddControllers();
-builder.Services.AddBookingApiVersioning();
-builder.Services.AddBookingSwagger();
-builder.Services.AddBookingCors(builder.Configuration);
-builder.Services.AddBookingJwtAuthentication(builder.Configuration);
-builder.Services.AddBookingApplicationServices(builder.Configuration);
 
-builder.Services.AddRazorPages();
-
-<<<<<<< feat/DataAccess_Servicios
-=======
 // -------------------------------------------------------------------------
 // Configuraciones transversales
 // -------------------------------------------------------------------------
 builder.Services.AddCustomApiVersioning();
-builder.Services.AddCustomCors(builder.Configuration);
+builder.Services.AddBookingCors(builder.Configuration);
 builder.Services.AddCustomAuthentication(builder.Configuration);
 builder.Services.AddCustomSwagger();
 builder.Services.AddAuthorization();
@@ -41,41 +35,25 @@ builder.Services.AddClientesModule();
 // -------------------------------------------------------------------------
 // Pipeline HTTP
 // -------------------------------------------------------------------------
->>>>>>> master
 var app = builder.Build();
 
+// Middleware global de errores — debe ser el primero del pipeline
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Error");
-    app.UseHsts();
-}
-else
+if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI(options =>
     {
-        var provider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
-        foreach (var description in provider.ApiVersionDescriptions)
-        {
-            options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
-        }
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Booking API v1");
+        options.RoutePrefix = "swagger";
     });
 }
 
 app.UseHttpsRedirection();
-app.UseRouting();
 app.UseCors(CorsExtensions.PolicyName);
-
-var jwtSettings = builder.Configuration.GetSection(JwtSettings.SectionName).Get<JwtSettings>();
-if (jwtSettings?.Enabled == true)
-    app.UseAuthentication();
-
+app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
-app.MapStaticAssets();
-app.MapRazorPages().WithStaticAssets();
 
 app.Run();

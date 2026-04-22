@@ -11,4 +11,8 @@ public sealed class ApiResponse<T>
 
     public static ApiResponse<T> SinContenido(string message = "Sin datos") =>
         new() { Success = true, Message = message, Data = default };
+
+    // Alias para compatibilidad con controllers que usan .Ok()
+    public static ApiResponse<T> Ok(T data, string message = "Operación exitosa") =>
+        Exitoso(data, message);
 }
