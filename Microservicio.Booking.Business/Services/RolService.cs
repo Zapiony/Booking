@@ -7,11 +7,6 @@ using Microservicio.Booking.DataManagement.Interfaces;
 
 namespace Microservicio.Booking.Business.Services;
 
-/// <summary>
-/// Servicio de negocio para la gestión de roles y asignaciones usuario-rol.
-/// Orquesta validaciones, reglas de dominio y llamadas a la capa 2.
-/// No accede a EF Core ni a repositorios directamente.
-/// </summary>
 public class RolService : IRolService
 {
     private readonly IRolDataService _rolDataService;
@@ -24,10 +19,6 @@ public class RolService : IRolService
         _rolDataService = rolDataService;
         _usuarioDataService = usuarioDataService;
     }
-
-    // -------------------------------------------------------------------------
-    // Catálogo de roles
-    // -------------------------------------------------------------------------
 
     public async Task<IReadOnlyList<RolResponse>> ObtenerTodosAsync(
         CancellationToken cancellationToken = default)
@@ -43,7 +34,7 @@ public class RolService : IRolService
         var model = await _rolDataService.ObtenerRolPorGuidAsync(rolGuid, cancellationToken);
 
         if (model is null)
-            throw new NotFoundException("Rol", rolGuid);
+            throw new NotFoundException($"No se encontró el rol con GUID '{rolGuid}'.");
 
         return RolBusinessMapper.ToResponse(model);
     }
@@ -52,14 +43,11 @@ public class RolService : IRolService
         CrearRolRequest request,
         CancellationToken cancellationToken = default)
     {
-        // 1. Validar campos
         RolValidator.ValidarCrear(request);
 
-        // 2. Verificar unicidad del nombre
         if (await _rolDataService.ExisteNombreRolAsync(request.NombreRol, cancellationToken))
             throw new ValidationException($"El rol '{request.NombreRol}' ya existe en el catálogo.");
 
-        // 3. Mapear y persistir
         var dataModel = RolBusinessMapper.ToDataModel(request);
         var creado = await _rolDataService.CrearRolAsync(dataModel, cancellationToken);
 
@@ -71,20 +59,15 @@ public class RolService : IRolService
         string modificadoPorUsuario,
         CancellationToken cancellationToken = default)
     {
-        // Verificar que el rol existe
         var rol = await _rolDataService.ObtenerRolPorGuidAsync(rolGuid, cancellationToken)
-            ?? throw new NotFoundException("Rol", rolGuid);
+            ?? throw new NotFoundException($"No se encontró el rol con GUID '{rolGuid}'.");
 
         var eliminado = await _rolDataService
             .EliminarLogicoRolAsync(rol.IdRol, modificadoPorUsuario, cancellationToken);
 
         if (!eliminado)
-            throw new NotFoundException("Rol", rolGuid);
+            throw new NotFoundException($"No se pudo eliminar el rol con GUID '{rolGuid}'.");
     }
-
-    // -------------------------------------------------------------------------
-    // Asignaciones usuario-rol
-    // -------------------------------------------------------------------------
 
     public async Task<IReadOnlyList<RolResponse>> ObtenerRolesDeUsuarioAsync(
         Guid usuarioGuid,
@@ -92,7 +75,7 @@ public class RolService : IRolService
     {
         var usuario = await _usuarioDataService
             .ObtenerPorGuidAsync(usuarioGuid, cancellationToken)
-            ?? throw new NotFoundException("Usuario", usuarioGuid);
+            ?? throw new NotFoundException($"No se encontró el usuario con GUID '{usuarioGuid}'.");
 
         var roles = await _rolDataService
             .ObtenerRolesDeUsuarioAsync(usuario.IdUsuario, cancellationToken);
@@ -106,7 +89,7 @@ public class RolService : IRolService
     {
         var usuario = await _usuarioDataService
             .ObtenerPorGuidAsync(usuarioGuid, cancellationToken)
-            ?? throw new NotFoundException("Usuario", usuarioGuid);
+            ?? throw new NotFoundException($"No se encontró el usuario con GUID '{usuarioGuid}'.");
 
         var asignaciones = await _rolDataService
             .ObtenerAsignacionesDeUsuarioAsync(usuario.IdUsuario, cancellationToken);
@@ -120,25 +103,20 @@ public class RolService : IRolService
         AsignarRolRequest request,
         CancellationToken cancellationToken = default)
     {
-        // 1. Validar campos
         RolValidator.ValidarAsignacion(request);
 
-        // 2. Verificar que el usuario existe
         var usuario = await _usuarioDataService
             .ObtenerPorGuidAsync(request.UsuarioGuid, cancellationToken)
-            ?? throw new NotFoundException("Usuario", request.UsuarioGuid);
+            ?? throw new NotFoundException($"No se encontró el usuario con GUID '{request.UsuarioGuid}'.");
 
-        // 3. Verificar que el rol existe
         var rol = await _rolDataService
             .ObtenerRolPorGuidAsync(request.RolGuid, cancellationToken)
-            ?? throw new NotFoundException("Rol", request.RolGuid);
+            ?? throw new NotFoundException($"No se encontró el rol con GUID '{request.RolGuid}'.");
 
-        // 4. Verificar que no tenga ya ese rol asignado
         if (await _rolDataService.UsuarioTieneRolAsync(usuario.IdUsuario, rol.IdRol, cancellationToken))
             throw new ValidationException(
                 $"El usuario ya tiene asignado el rol '{rol.NombreRol}'.");
 
-        // 5. Asignar
         await _rolDataService.AsignarRolAsync(
             usuario.IdUsuario,
             rol.IdRol,
@@ -150,25 +128,20 @@ public class RolService : IRolService
         AsignarRolRequest request,
         CancellationToken cancellationToken = default)
     {
-        // 1. Validar campos
         RolValidator.ValidarAsignacion(request);
 
-        // 2. Verificar que el usuario existe
         var usuario = await _usuarioDataService
             .ObtenerPorGuidAsync(request.UsuarioGuid, cancellationToken)
-            ?? throw new NotFoundException("Usuario", request.UsuarioGuid);
+            ?? throw new NotFoundException($"No se encontró el usuario con GUID '{request.UsuarioGuid}'.");
 
-        // 3. Verificar que el rol existe
         var rol = await _rolDataService
             .ObtenerRolPorGuidAsync(request.RolGuid, cancellationToken)
-            ?? throw new NotFoundException("Rol", request.RolGuid);
+            ?? throw new NotFoundException($"No se encontró el rol con GUID '{request.RolGuid}'.");
 
-        // 4. Verificar que la asignación existe antes de revocar
         if (!await _rolDataService.UsuarioTieneRolAsync(usuario.IdUsuario, rol.IdRol, cancellationToken))
             throw new ValidationException(
                 $"El usuario no tiene asignado el rol '{rol.NombreRol}'.");
 
-        // 5. Revocar
         var revocado = await _rolDataService.RevocarRolAsync(
             usuario.IdUsuario,
             rol.IdRol,
@@ -176,6 +149,7 @@ public class RolService : IRolService
             cancellationToken);
 
         if (!revocado)
-            throw new NotFoundException("Asignación de rol", $"{request.UsuarioGuid}/{request.RolGuid}");
+            throw new NotFoundException(
+                $"No se encontró la asignación de rol '{request.RolGuid}' para el usuario '{request.UsuarioGuid}'.");
     }
 }

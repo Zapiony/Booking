@@ -101,8 +101,8 @@ public class FacturacionService : IFacturacionService
     }
 
     public async Task<DataPagedResult<FacturacionResponse>> BuscarAsync(
-        FacturacionFiltroRequest request, 
-        CancellationToken cancellationToken = default)
+    FacturacionFiltroRequest request,
+    CancellationToken cancellationToken = default)
     {
         var filtro = new FacturacionFiltroDataModel
         {
@@ -116,17 +116,16 @@ public class FacturacionService : IFacturacionService
 
         var pagedResult = await _facturacionDataService.BuscarAsync(filtro, cancellationToken);
 
+        // ✅ constructor con propiedades en español
         var items = pagedResult.Items
             .Select(FacturacionBusinessMapper.ToResponse)
             .ToList();
 
-        return new DataPagedResult<FacturacionResponse>
-        {
-            Items = items,
-            PageNumber = pagedResult.PageNumber,
-            PageSize = pagedResult.PageSize,
-            TotalRecords = pagedResult.TotalRecords
-        };
+        return new DataPagedResult<FacturacionResponse>(
+            items,
+            pagedResult.TotalRegistros,
+            pagedResult.PaginaActual,
+            pagedResult.TamanoPagina);
     }
 
     // =========================================================================

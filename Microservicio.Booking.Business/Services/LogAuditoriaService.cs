@@ -48,8 +48,8 @@ public class LogAuditoriaService : ILogAuditoriaService
     // =========================================================================
 
     public async Task<DataPagedResult<LogAuditoriaResponse>> BuscarAsync(
-        LogAuditoriaFiltroRequest request, 
-        CancellationToken cancellationToken = default)
+    LogAuditoriaFiltroRequest request,
+    CancellationToken cancellationToken = default)
     {
         var filtro = new LogAuditoriaFiltroDataModel
         {
@@ -60,16 +60,15 @@ public class LogAuditoriaService : ILogAuditoriaService
 
         var pagedResult = await _logAuditoriaDataService.BuscarAsync(filtro, cancellationToken);
 
+        // ✅ constructor con propiedades en español
         var items = pagedResult.Items
             .Select(LogAuditoriaBusinessMapper.ToResponse)
             .ToList();
 
-        return new DataPagedResult<LogAuditoriaResponse>
-        {
-            Items = items,
-            PageNumber = pagedResult.PageNumber,
-            PageSize = pagedResult.PageSize,
-            TotalRecords = pagedResult.TotalRecords
-        };
+        return new DataPagedResult<LogAuditoriaResponse>(
+            items,
+            pagedResult.TotalRegistros,
+            pagedResult.PaginaActual,
+            pagedResult.TamanoPagina);
     }
 }
