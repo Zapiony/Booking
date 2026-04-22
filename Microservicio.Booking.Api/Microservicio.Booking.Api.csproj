@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup>
 		<TargetFramework>net10.0</TargetFramework>
@@ -24,6 +24,8 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Microservicio.Booking.Business\Microservicio.Booking.Business.csproj" />
+		<ProjectReference Include="..\Microservicio.Booking.DataAcces\Microservicio.Booking.DataAcces.csproj" />
+		<ProjectReference Include="..\Microservicio.Booking.DataManagement\Microservicio.Booking.DataManagement.csproj" />
 	</ItemGroup>
 
 </Project>
