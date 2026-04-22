@@ -1,6 +1,8 @@
 using Microservicio.Booking.Api.Extensions;
 using Microservicio.Booking.Api.Middleware;
 
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 var builder = WebApplication.CreateBuilder(args);
 
 // -------------------------------------------------------------------------
