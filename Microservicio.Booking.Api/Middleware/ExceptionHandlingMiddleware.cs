@@ -39,7 +39,7 @@ public sealed class ExceptionHandlingMiddleware
         {
             ValidationException ve => (
                 (int)HttpStatusCode.BadRequest,
-                ApiErrorResponse.Crear(ve.Message, ve.Errores)),
+                ApiErrorResponse.Crear(ve.Message, ve.Errors.ToArray())),
             NotFoundException ne => (
                 (int)HttpStatusCode.NotFound,
                 ApiErrorResponse.Crear(ne.Message, new[] { ne.Message })),

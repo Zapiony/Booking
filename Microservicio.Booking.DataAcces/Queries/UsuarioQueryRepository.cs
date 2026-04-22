@@ -65,9 +65,9 @@ public sealed record RolResumenDto(
 /// </summary>
 public class UsuarioQueryRepository
 {
-    private readonly UsuarioDbContext _context;
+    private readonly BookingDbContext _context;
 
-    public UsuarioQueryRepository(UsuarioDbContext context)
+    public UsuarioQueryRepository(BookingDbContext context)
     {
         _context = context;
     }
@@ -77,7 +77,7 @@ public class UsuarioQueryRepository
     // -------------------------------------------------------------------------
 
     private IQueryable<UsuarioAppEntity> QueryVigentes =>
-        _context.Usuarios
+        _context.UsuariosApp
                 .AsNoTracking()
                 .Where(u => !u.EsEliminado);
 

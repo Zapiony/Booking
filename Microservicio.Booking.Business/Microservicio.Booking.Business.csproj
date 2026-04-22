@@ -11,4 +11,12 @@
     <ProjectReference Include="..\Microservicio.Booking.DataManagement\Microservicio.Booking.DataManagement.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="Services\UsuarioService.cs" />
+    <Compile Remove="Services\RolService.cs" />
+    <Compile Remove="Services\ClienteService.cs" />
+    <Compile Remove="Services\FacturacionService.cs" />
+    <Compile Remove="Services\LogAuditoriaService.cs" />
+  </ItemGroup>
+
 </Project>

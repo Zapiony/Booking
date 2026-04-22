@@ -17,10 +17,10 @@ public static class ServiceCollectionExtensions
         var connectionString = configuration.GetConnectionString("Default")
             ?? throw new InvalidOperationException("Falta ConnectionStrings:Default en configuración.");
 
-        services.AddDbContext<UsuarioDbContext>(options =>
+        services.AddDbContext<BookingDbContext>(options =>
             options.UseNpgsql(connectionString));
 
-        services.AddScoped<DbContext>(sp => sp.GetRequiredService<UsuarioDbContext>());
+        services.AddScoped<DbContext>(sp => sp.GetRequiredService<BookingDbContext>());
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IServicioDataService, ServicioDataService>();

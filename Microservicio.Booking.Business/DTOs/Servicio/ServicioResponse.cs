@@ -2,7 +2,6 @@ namespace Microservicio.Booking.Business.DTOs.Servicio;
 
 public sealed class ServicioResponse
 {
-    public int IdServicio { get; set; }
     public Guid GuidServicio { get; set; }
 
     public Guid GuidTipoServicio { get; set; }

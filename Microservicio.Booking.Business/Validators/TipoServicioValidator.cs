@@ -23,7 +23,7 @@ public static class TipoServicioValidator
             errores.Add($"TamanoPagina no puede superar {TamanoPaginaMaximo}.");
 
         if (errores.Count > 0)
-            throw new ValidationException(errores);
+            throw new ValidationException("Error de validación de paginación.", errores);
     }
 
     public static void ValidarCrear(CrearTipoServicioRequest request)
@@ -37,7 +37,7 @@ public static class TipoServicioValidator
         ValidarEstado(request.Estado, errores);
 
         if (errores.Count > 0)
-            throw new ValidationException(errores);
+            throw new ValidationException("Error de validación al crear tipo de servicio.", errores);
     }
 
     public static void ValidarActualizar(ActualizarTipoServicioRequest request)
@@ -53,7 +53,7 @@ public static class TipoServicioValidator
         ValidarEstado(request.Estado, errores);
 
         if (errores.Count > 0)
-            throw new ValidationException(errores);
+            throw new ValidationException("Error de validación al actualizar tipo de servicio.", errores);
     }
 
     private static void ValidarEstado(string estado, List<string> errores)

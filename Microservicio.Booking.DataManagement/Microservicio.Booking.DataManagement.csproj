@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
@@ -13,6 +12,15 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Microservicio.Booking.DataAcces\Microservicio.Booking.DataAcces.csproj" />
+  </ItemGroup>
+
+  <!-- Servicios pendientes de alinear con repositorios; no bloquean Servicio/TipoServicio -->
+  <ItemGroup>
+    <Compile Remove="Services\ClienteDataService.cs" />
+    <Compile Remove="Services\FacturacionDataService.cs" />
+    <Compile Remove="Services\LogAuditoriaDataService.cs" />
+    <Compile Remove="Services\RolDataService.cs" />
+    <Compile Remove="Services\UsuarioDataService.cs" />
   </ItemGroup>
 
 </Project>

@@ -2,7 +2,6 @@ namespace Microservicio.Booking.Business.DTOs.TipoServicio;
 
 public sealed class TipoServicioResponse
 {
-    public int IdTipoServicio { get; set; }
     public Guid GuidTipoServicio { get; set; }
 
     public string Nombre { get; set; } = string.Empty;

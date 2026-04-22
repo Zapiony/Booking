@@ -37,7 +37,6 @@ public static class TipoServicioBusinessMapper
     {
         return new TipoServicioResponse
         {
-            IdTipoServicio = modelo.IdTipoServicio,
             GuidTipoServicio = modelo.GuidTipoServicio,
             Nombre = modelo.Nombre,
             Descripcion = modelo.Descripcion,

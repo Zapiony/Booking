@@ -89,10 +89,11 @@ public sealed class TipoServiciosController : ControllerBase
     }
 
     [HttpDelete("{guid:guid}")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ApiResponse<string>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> EliminarAsync(Guid guid, CancellationToken cancellationToken = default)
     {
         await _tiposServicio.EliminarAsync(guid, cancellationToken);
-        return NoContent();
+        return Ok(ApiResponse<string>.Exitoso("OK", "Tipo de servicio eliminado lógicamente."));
     }
 }
