@@ -37,20 +37,16 @@ public class LogAuditoriaDataService : ILogAuditoriaDataService
     {
         var resultado = await _unitOfWork.LogAuditoriaQueryRepository.ListarLogsAsync(filtro.TablaAfectada, filtro.PaginaActual, filtro.TamanioPagina, cancellationToken);
 
-        return new DataPagedResult<LogAuditoriaDataModel>
-        {
-            Items = resultado.Items.Select(dto => new LogAuditoriaDataModel
+        return DataPagedResult<LogAuditoriaDataModel>.DesdeDal(
+            resultado,
+            dto => new LogAuditoriaDataModel
             {
                 IdLog = dto.IdLog,
                 TablaAfectada = dto.TablaAfectada,
                 Operacion = dto.Operacion,
                 CreadoPorUsuario = dto.CreadoPorUsuario,
                 FechaUtc = dto.FechaUtc
-            }).ToList(),
-            PageNumber = resultado.PaginaActual,
-            PageSize = resultado.TamanoPagina,
-            TotalRecords = resultado.TotalRegistros
-        };
+            });
     }
 
     // =========================================================================

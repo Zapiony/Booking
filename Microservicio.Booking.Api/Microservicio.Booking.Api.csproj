@@ -27,6 +27,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Microservicio.Booking.Business\Microservicio.Booking.Business.csproj" />
 		<ProjectReference Include="..\Microservicio.Booking.DataAcces\Microservicio.Booking.DataAcces.csproj" />
+		<ProjectReference Include="..\Microservicio.Booking.DataManagement\Microservicio.Booking.DataManagement.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

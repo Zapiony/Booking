@@ -46,6 +46,10 @@ public interface IUsuarioRepository
         string correo,
         CancellationToken cancellationToken = default);
 
+    Task<UsuarioAppEntity?> ObtenerParaActualizarAsync(
+    int idUsuario,
+    CancellationToken cancellationToken = default);
+
     // -------------------------------------------------------------------------
     // Lecturas con roles — Include de navegación
     // -------------------------------------------------------------------------

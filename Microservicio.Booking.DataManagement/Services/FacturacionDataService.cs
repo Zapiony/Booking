@@ -48,28 +48,24 @@ public class FacturacionDataService : IFacturacionDataService
     public async Task<DataPagedResult<FacturacionDataModel>> BuscarAsync(FacturacionFiltroDataModel filtro, CancellationToken cancellationToken = default)
     {
         var resultado = await _unitOfWork.FacturacionQueryRepository.ListarFacturacionesAsync(
-            filtro.Estado, 
-            filtro.IdCliente, 
-            filtro.FechaEmisionInicio, 
-            filtro.FechaEmisionFin, 
-            filtro.PaginaActual, 
-            filtro.TamanioPagina, 
+            filtro.Estado,
+            filtro.IdCliente,
+            filtro.FechaEmisionInicio,
+            filtro.FechaEmisionFin,
+            filtro.PaginaActual,
+            filtro.TamanioPagina,
             cancellationToken);
 
-        return new DataPagedResult<FacturacionDataModel>
-        {
-            Items = resultado.Items.Select(dto => new FacturacionDataModel
+        return DataPagedResult<FacturacionDataModel>.DesdeDal(
+            resultado,
+            dto => new FacturacionDataModel
             {
                 GuidFactura = dto.GuidFactura,
                 NumeroFactura = dto.NumeroFactura,
                 Total = dto.Total,
                 Estado = dto.Estado,
                 FechaRegistroUtc = dto.FechaRegistroUtc
-            }).ToList(),
-            PageNumber = resultado.PaginaActual,
-            PageSize = resultado.TamanoPagina,
-            TotalRecords = resultado.TotalRegistros
-        };
+            });
     }
 
     // =========================================================================

@@ -57,6 +57,8 @@ public class UsuarioRepository : IUsuarioRepository
         CancellationToken cancellationToken = default)
     {
         return await QueryVigentes
+            .Include(u => u.UsuariosRoles.Where(ur => !ur.EsEliminado && ur.Activo))
+                .ThenInclude(ur => ur.Rol)
             .FirstOrDefaultAsync(
                 u => u.Username == username,
                 cancellationToken);
@@ -70,6 +72,15 @@ public class UsuarioRepository : IUsuarioRepository
             .FirstOrDefaultAsync(
                 u => u.Correo == correo,
                 cancellationToken);
+    }
+
+    public async Task<UsuarioAppEntity?> ObtenerParaActualizarAsync(
+    int idUsuario,
+    CancellationToken cancellationToken = default)
+    {
+        return await _context.UsuariosApp
+            .FirstOrDefaultAsync(u => u.IdUsuario == idUsuario
+                                   && !u.EsEliminado, cancellationToken);
     }
 
     // -------------------------------------------------------------------------

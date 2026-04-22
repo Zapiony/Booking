@@ -95,21 +95,19 @@ public class ClienteDataService : IClienteDataService
     // =========================================================================
 
     public async Task<DataPagedResult<ClienteDataModel>> BuscarAsync(
-        ClienteFiltroDataModel filtro,
-        CancellationToken cancellationToken = default)
+    ClienteFiltroDataModel filtro,
+    CancellationToken cancellationToken = default)
     {
-        // Construye el término de búsqueda general para el QueryRepository
         var termino = new[]
         {
-            filtro.Nombres,
-            filtro.Apellidos,
-            filtro.RazonSocial,
-            filtro.Correo,
-            filtro.NumeroIdentificacion
-        }
+        filtro.Nombres,
+        filtro.Apellidos,
+        filtro.RazonSocial,
+        filtro.Correo,
+        filtro.NumeroIdentificacion
+    }
         .FirstOrDefault(t => !string.IsNullOrWhiteSpace(t)) ?? string.Empty;
 
-        // Si hay estado definido usa el filtro por estado, si no lista todos
         PagedResult<ClienteResumenDto> resultado;
 
         if (!string.IsNullOrWhiteSpace(termino))
@@ -139,26 +137,20 @@ public class ClienteDataService : IClienteDataService
                     cancellationToken);
         }
 
-        return new DataPagedResult<ClienteDataModel>
-        {
-            Items = resultado.Items
-                        .Select(dto => new ClienteDataModel
-                        {
-                            GuidCliente = dto.GuidCliente,
-                            Nombres = dto.Nombres,
-                            Apellidos = dto.Apellidos,
-                            RazonSocial = dto.RazonSocial,
-                            TipoIdentificacion = dto.TipoIdentificacion,
-                            NumeroIdentificacion = dto.NumeroIdentificacion,
-                            Correo = dto.Correo,
-                            Telefono = dto.Telefono,
-                            Estado = dto.Estado
-                        })
-                        .ToList(),
-            PageNumber = resultado.PaginaActual,   // ← nombre correcto de DataPagedResult
-            PageSize = resultado.TamanoPagina,  // ← nombre correcto de DataPagedResult
-            TotalRecords = resultado.TotalRegistros
-        };
+        return DataPagedResult<ClienteDataModel>.DesdeDal(
+            resultado,
+            dto => new ClienteDataModel
+            {
+                GuidCliente = dto.GuidCliente,
+                Nombres = dto.Nombres,
+                Apellidos = dto.Apellidos,
+                RazonSocial = dto.RazonSocial,
+                TipoIdentificacion = dto.TipoIdentificacion,
+                NumeroIdentificacion = dto.NumeroIdentificacion,
+                Correo = dto.Correo,
+                Telefono = dto.Telefono,
+                Estado = dto.Estado
+            });
     }
 
     // =========================================================================

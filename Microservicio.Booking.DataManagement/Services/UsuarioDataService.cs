@@ -85,19 +85,18 @@ public class UsuarioDataService : IUsuarioDataService
     }
 
     public async Task<DataPagedResult<UsuarioDataModel>> BuscarAsync(
-        UsuarioFiltroDataModel filtro,
-        CancellationToken cancellationToken = default)
+    UsuarioFiltroDataModel filtro,
+    CancellationToken cancellationToken = default)
     {
-        // Usa el QueryRepository para proyecciones optimizadas
         var result = string.IsNullOrWhiteSpace(filtro.Termino)
             ? await _unitOfWork.UsuarioQueryRepository
-                .ListarUsuariosAsync(filtro.PageNumber, filtro.PageSize, cancellationToken)
+                .ListarUsuariosAsync(filtro.PaginaActual, filtro.TamanioPagina, cancellationToken)
             : await _unitOfWork.UsuarioQueryRepository
-                .BuscarUsuariosAsync(filtro.Termino, filtro.PageNumber, filtro.PageSize, cancellationToken);
+                .BuscarUsuariosAsync(filtro.Termino, filtro.PaginaActual, filtro.TamanioPagina, cancellationToken);
 
-        return new DataPagedResult<UsuarioDataModel>
-        {
-            Items = result.Items.Select(dto => new UsuarioDataModel
+        return DataPagedResult<UsuarioDataModel>.DesdeDal(
+            result,
+            dto => new UsuarioDataModel
             {
                 UsuarioGuid = dto.UsuarioGuid,
                 Username = dto.Username,
@@ -106,11 +105,7 @@ public class UsuarioDataService : IUsuarioDataService
                 Activo = dto.Activo,
                 FechaRegistroUtc = dto.FechaRegistroUtc,
                 NombresRoles = dto.NombresRoles
-            }).ToList(),
-            PageNumber = filtro.PageNumber,
-            PageSize = filtro.PageSize,
-            TotalRecords = result.TotalRegistros
-        };
+            });
     }
 
     // -------------------------------------------------------------------------
