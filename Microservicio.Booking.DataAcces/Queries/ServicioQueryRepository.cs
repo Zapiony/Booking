@@ -1,8 +1,9 @@
+using Microservicio.Booking.DataAccess.Repositories.Interfaces;
 using Microservicio.Booking.DataAccess.Common;
-using Microservicio.Servicios.DataAccess.Entities;
+using Microservicio.Booking.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Microservicio.Servicios.DataAccess.Queries;
+namespace Microservicio.Booking.DataAccess.Queries;
 
 /// <summary>
 /// Repositorio de solo lectura para el dominio de servicios (proveedores).

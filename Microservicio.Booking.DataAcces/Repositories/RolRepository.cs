@@ -15,9 +15,9 @@ namespace Microservicio.Booking.DataAccess.Repositories;
 /// </summary>
 public class RolRepository : IRolRepository
 {
-    private readonly UsuarioDbContext _context;
-
-    public RolRepository(UsuarioDbContext context)
+    private readonly BookingDbContext _context;
+        
+    public RolRepository(BookingDbContext context)
     {
         _context = context;
     }
@@ -99,6 +99,26 @@ public class RolRepository : IRolRepository
             totalRegistros,
             paginaActual,
             tamanoPagina);
+    }
+
+    public async Task<RolEntity?> ObtenerRolParaActualizarAsync(
+    int idRol,
+    CancellationToken cancellationToken = default)
+    {
+        return await _context.Roles
+            .FirstOrDefaultAsync(r => r.IdRol == idRol
+                                   && !r.EsEliminado, cancellationToken);
+    }
+
+    public async Task<UsuarioRolEntity?> ObtenerAsignacionParaActualizarAsync(
+        int idUsuario,
+        int idRol,
+        CancellationToken cancellationToken = default)
+    {
+        return await _context.UsuariosRoles
+            .FirstOrDefaultAsync(ur => ur.IdUsuario == idUsuario
+                                    && ur.IdRol == idRol
+                                    && !ur.EsEliminado, cancellationToken);
     }
 
     // -------------------------------------------------------------------------
