@@ -51,7 +51,10 @@ public class AuthService : IAuthService
     // -------------------------------------------------------------------------
     private static bool VerificarPassword(string password, string storedHash, string storedSalt)
     {
-        // Comparación temporal directa — reemplazar con HMAC real cuando se implemente registro
-        return password == storedHash;
+        var saltBytes = Convert.FromBase64String(storedSalt);
+        using var hmac = new System.Security.Cryptography.HMACSHA256(saltBytes);
+        var computedHash = Convert.ToBase64String(
+            hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password)));
+        return computedHash == storedHash;
     }
 }

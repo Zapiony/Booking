@@ -6,6 +6,8 @@ var builder = WebApplication.CreateBuilder(args);
 // -------------------------------------------------------------------------
 // Servicios base
 // -------------------------------------------------------------------------
+Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
+
 builder.Services.AddControllers();
 
 // -------------------------------------------------------------------------

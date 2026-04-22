@@ -1,4 +1,4 @@
-﻿using Microservicio.Booking.DataAccess.Entities;
+using Microservicio.Booking.DataAccess.Entities;
 using Microservicio.Booking.DataManagement.Interfaces;
 using Microservicio.Booking.DataManagement.Mappers;
 using Microservicio.Booking.DataManagement.Models;
@@ -66,11 +66,7 @@ public class UsuarioDataService : IUsuarioDataService
 
         if (entity is null) return null;
 
-        // Cargar con roles para tener la proyección completa
-        var entityConRoles = await _unitOfWork.UsuarioRepository
-            .ObtenerConRolesPorGuidAsync(entity.UsuarioGuid, cancellationToken);
-
-        return entityConRoles is null ? null : UsuarioDataMapper.ToDataModel(entityConRoles);
+        return UsuarioDataMapper.ToDataModel(entity);
     }
 
     public async Task<UsuarioDataModel?> ObtenerPorCorreoAsync(

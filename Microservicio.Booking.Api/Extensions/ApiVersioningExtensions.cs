@@ -18,7 +18,7 @@ public static class ApiVersioningExtensions
         .AddApiExplorer(options =>
         {
             options.GroupNameFormat = "'v'V";
-            options.SubstituteApiVersionInUrl = true;
+            options.SubstituteApiVersionInUrl = false;
         });
 
         return services;
