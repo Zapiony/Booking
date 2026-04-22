@@ -1,4 +1,4 @@
-﻿namespace Microservicio.Booking.Business.Exceptions;
+namespace Microservicio.Booking.Business.Exceptions;
 
 /// <summary>
 /// Excepción lanzada cuando uno o más campos no cumplen las reglas de negocio.

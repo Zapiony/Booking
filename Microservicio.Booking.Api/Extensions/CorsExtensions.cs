@@ -1,26 +1,23 @@
+using Microservicio.Booking.Api.Models.Settings;
+
 namespace Microservicio.Booking.Api.Extensions;
 
-/// <summary>
-/// Configura CORS para permitir peticiones desde los frontends locales.
-/// Los orígenes se leen desde appsettings.json → sección "Cors:AllowedOrigins".
-/// </summary>
 public static class CorsExtensions
 {
-    public static IServiceCollection AddCustomCors(
-        this IServiceCollection services,
-        IConfiguration configuration)
+    public const string PolicyName = "BookingCorsPolicy";
+
+    public static IServiceCollection AddBookingCors(this IServiceCollection services, IConfiguration configuration)
     {
-        var allowedOrigins = configuration
-            .GetSection("Cors:AllowedOrigins")
-            .Get<string[]>() ?? Array.Empty<string>();
+        var cors = configuration.GetSection(CorsSettings.SectionName).Get<CorsSettings>() ?? new CorsSettings();
 
         services.AddCors(options =>
         {
-            options.AddPolicy("CorsPolicy", policy =>
+            options.AddPolicy(PolicyName, policy =>
             {
-                policy.WithOrigins(allowedOrigins)
-                      .AllowAnyHeader()
-                      .AllowAnyMethod();
+                if (cors.AllowedOrigins is { Length: > 0 })
+                    policy.WithOrigins(cors.AllowedOrigins).AllowAnyHeader().AllowAnyMethod();
+                else
+                    policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
             });
         });
 

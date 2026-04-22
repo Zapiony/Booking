@@ -1,22 +1,15 @@
 namespace Microservicio.Booking.Api.Models.Common;
 
-/// <summary>
-/// Modelo estándar para respuestas de error de la API.
-/// El middleware de excepciones lo usa para traducir errores de negocio a HTTP.
-/// </summary>
-public class ApiErrorResponse
+public sealed class ApiErrorResponse
 {
-    public bool Success { get; set; }
-    public string Message { get; set; } = null!;
-    public IReadOnlyCollection<string> Errors { get; set; } = Array.Empty<string>();
+    public bool Success { get; init; } = false;
+    public string Message { get; init; } = string.Empty;
+    public IReadOnlyList<string> Errors { get; init; } = [];
 
-    public static ApiErrorResponse Fail(string message, IReadOnlyCollection<string>? errors = null)
-    {
-        return new ApiErrorResponse
+    public static ApiErrorResponse Crear(string message, IReadOnlyList<string>? errors = null) =>
+        new()
         {
-            Success = false,
             Message = message,
             Errors = errors ?? Array.Empty<string>()
         };
-    }
 }

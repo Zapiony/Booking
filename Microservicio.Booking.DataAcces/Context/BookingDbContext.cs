@@ -1,4 +1,4 @@
-﻿namespace Microservicio.Booking.DataAccess.Context;
+namespace Microservicio.Booking.DataAccess.Context;
 using Microservicio.Booking.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 

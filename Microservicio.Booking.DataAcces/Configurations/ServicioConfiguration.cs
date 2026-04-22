@@ -159,14 +159,13 @@ public class ServicioConfiguration : IEntityTypeConfiguration<ServicioEntity>
                .IsRequired(false);
 
         // -------------------------------------------------------------------------
-        // [5] Concurrencia optimista — PostgreSQL (bytea)
+        // [5] Concurrencia optimista — PostgreSQL (xmin)
         // -------------------------------------------------------------------------
-        builder.Property(s => s.RowVersion)
-               .HasColumnName("row_version")
-               .HasColumnType("bytea")
+        builder.Property<uint>("xmin")
+               .HasColumnName("xmin")
+               .HasColumnType("xid")
                .ValueGeneratedOnAddOrUpdate()
-               .IsConcurrencyToken()
-               .IsRequired();
+               .IsConcurrencyToken();
 
         // -------------------------------------------------------------------------
         // Navegación — TipoServicio (muchos a uno)

@@ -1,15 +1,59 @@
-﻿namespace Microservicio.Booking.DataManagement.Models;
+using Microservicio.Booking.DataAccess.Common;
+
+namespace Microservicio.Booking.DataManagement.Models;
 
 /// <summary>
-/// Modelo paginado propio de la capa de Gestión de Datos.
-/// Cada capa expone su propio modelo de paginación para no arrastrar
-/// el PagedResult de DataAccess hacia las capas superiores.
+/// Resultado paginado de la capa DataManagement, desacoplado de <see cref="PagedResult{T}"/> de DataAccess.
 /// </summary>
-public class DataPagedResult<T>
+public sealed class DataPagedResult<T>
 {
-    public IReadOnlyCollection<T> Items { get; set; } = Array.Empty<T>();
-    public int PageNumber { get; set; }
-    public int PageSize { get; set; }
-    public long TotalRecords { get; set; }
-    public int TotalPages => (int)Math.Ceiling((double)TotalRecords / PageSize);
+    public IReadOnlyList<T> Items { get; init; }
+    public int PaginaActual { get; init; }
+    public int TamanoPagina { get; init; }
+    public int TotalRegistros { get; init; }
+    public int TotalPaginas { get; init; }
+    public bool TienePaginaAnterior { get; init; }
+    public bool TienePaginaSiguiente { get; init; }
+
+    public DataPagedResult(
+        IEnumerable<T> items,
+        int totalRegistros,
+        int paginaActual,
+        int tamanoPagina)
+    {
+        ArgumentOutOfRangeException.ThrowIfLessThan(paginaActual, 1, nameof(paginaActual));
+        ArgumentOutOfRangeException.ThrowIfLessThan(tamanoPagina, 1, nameof(tamanoPagina));
+        ArgumentOutOfRangeException.ThrowIfNegative(totalRegistros, nameof(totalRegistros));
+
+        Items = items.ToList().AsReadOnly();
+        TotalRegistros = totalRegistros;
+        PaginaActual = paginaActual;
+        TamanoPagina = tamanoPagina;
+        TotalPaginas = tamanoPagina > 0
+            ? (int)Math.Ceiling((double)totalRegistros / tamanoPagina)
+            : 0;
+        TienePaginaAnterior = PaginaActual > 1;
+        TienePaginaSiguiente = PaginaActual < TotalPaginas;
+    }
+
+    /// <summary>
+    /// Mapea un <see cref="PagedResult{T}"/> de DataAccess al modelo de esta capa.
+    /// </summary>
+    public static DataPagedResult<T> DesdeDal(PagedResult<T> origen) =>
+        new(origen.Items, origen.TotalRegistros, origen.PaginaActual, origen.TamanoPagina);
+
+    /// <summary>
+    /// Mapea un resultado paginado de DataAccess transformando cada ítem.
+    /// </summary>
+    public static DataPagedResult<TDestino> DesdeDal<TOrigen, TDestino>(
+        PagedResult<TOrigen> origen,
+        Func<TOrigen, TDestino> mapearItem) =>
+        new(
+            origen.Items.Select(mapearItem),
+            origen.TotalRegistros,
+            origen.PaginaActual,
+            origen.TamanoPagina);
+
+    public static DataPagedResult<T> Vacio(int paginaActual, int tamanoPagina) =>
+        new(Array.Empty<T>(), totalRegistros: 0, paginaActual, tamanoPagina);
 }

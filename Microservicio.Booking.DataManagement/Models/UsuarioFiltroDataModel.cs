@@ -24,10 +24,10 @@ public class UsuarioFiltroDataModel
     /// <summary>
     /// Número de página base 1.
     /// </summary>
-    public int PageNumber { get; set; } = 1;
+    public int PaginaActual { get; set; } = 1;
 
     /// <summary>
     /// Registros por página.
     /// </summary>
-    public int PageSize { get; set; } = 10;
+    public int TamanioPagina { get; set; } = 10;
 }

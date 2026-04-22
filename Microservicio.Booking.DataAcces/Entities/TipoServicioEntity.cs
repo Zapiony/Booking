@@ -60,16 +60,6 @@ public class TipoServicioEntity
     public string? ServicioOrigen { get; set; }
 
     // -------------------------------------------------------------------------
-    // [5] Concurrencia optimista (ROWVERSION → EF Core token)
-    // -------------------------------------------------------------------------
-
-    /// <summary>
-    /// Token de concurrencia optimista mapeado a ROWVERSION en SQL Server.
-    /// EF Core lo gestiona automáticamente; nunca se asigna manualmente.
-    /// </summary>
-    public byte[] RowVersion { get; set; } = [];
-
-    // -------------------------------------------------------------------------
     // Navegación
     // -------------------------------------------------------------------------
 

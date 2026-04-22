@@ -1,4 +1,3 @@
-using Microservicio.Booking.DataAccess.Repositories.Interfaces;
 using Microservicio.Booking.DataAccess.Common;
 using Microservicio.Booking.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;

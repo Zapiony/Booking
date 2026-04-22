@@ -2,7 +2,7 @@ using Microservicio.Booking.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Microservicio.Servicios.DataAccess.Configurations;
+namespace Microservicio.Booking.DataAccess.Configurations;
 
 /// <summary>
 /// Configuración de EF Core para la tabla booking.tipo_servicio.
@@ -49,7 +49,7 @@ public class TipoServicioConfiguration : IEntityTypeConfiguration<TipoServicioEn
 
         builder.ToTable(t => t.HasCheckConstraint(
             "chk_tipo_servicio_nombre",
-            "nombre IN (N'Vuelos', N'Alojamiento', N'Atracciones', N'Alquiler de Carros')"
+            "nombre IN ('Vuelos', 'Alojamiento', 'Atracciones', 'Alquiler de Carros')"
         ));
 
         builder.Property(ts => ts.Descripcion)
@@ -114,14 +114,13 @@ public class TipoServicioConfiguration : IEntityTypeConfiguration<TipoServicioEn
                .IsRequired(false);
 
         // -------------------------------------------------------------------------
-        // [5] Concurrencia optimista — PostgreSQL (bytea)
+        // [5] Concurrencia optimista — PostgreSQL (xmin)
         // -------------------------------------------------------------------------
-        builder.Property(ts => ts.RowVersion)
-               .HasColumnName("row_version")
-               .HasColumnType("bytea")
+        builder.Property<uint>("xmin")
+               .HasColumnName("xmin")
+               .HasColumnType("xid")
                .ValueGeneratedOnAddOrUpdate()
-               .IsConcurrencyToken()
-               .IsRequired();
+               .IsConcurrencyToken();
 
         // -------------------------------------------------------------------------
         // Navegación — Servicio (uno a muchos)
