@@ -61,8 +61,26 @@ public class ExceptionHandlingMiddleware
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)statusCode;
 
+<<<<<<< Updated upstream
         var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
         var json = JsonSerializer.Serialize(response, options);
+=======
+        var (statusCode, body) = exception switch
+        {
+            ValidationException ve => (
+                (int)HttpStatusCode.BadRequest,
+                ApiErrorResponse.Crear(ve.Message, ve.Errors.ToList())),
+            NotFoundException ne => (
+                (int)HttpStatusCode.NotFound,
+                ApiErrorResponse.Crear(ne.Message, new[] { ne.Message })),
+            BusinessException be => (
+                (int)HttpStatusCode.Conflict,
+                ApiErrorResponse.Crear(be.Message, new[] { be.Message })),
+            _ => (
+                (int)HttpStatusCode.InternalServerError,
+                ApiErrorResponse.Crear("Error interno del servidor.", Array.Empty<string>()))
+        };
+>>>>>>> Stashed changes
 
         await context.Response.WriteAsync(json);
     }
