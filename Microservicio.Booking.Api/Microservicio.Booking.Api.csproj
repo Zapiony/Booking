@@ -26,4 +26,16 @@
 		<ProjectReference Include="..\Microservicio.Booking.Business\Microservicio.Booking.Business.csproj" />
 	</ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Asp.Versioning.Mvc" Version="8.1.1" />
+    <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.6" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Microservicio.Booking.Business\Microservicio.Booking.Business.csproj" />
+    <ProjectReference Include="..\Microservicio.Booking.DataAcces\Microservicio.Booking.DataAcces.csproj" />
+  </ItemGroup>
+
 </Project>

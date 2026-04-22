@@ -1,53 +1,40 @@
 using System.Text;
+using Microservicio.Booking.Api.Models.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Microservicio.Booking.Api.Models.Settings;
 
 namespace Microservicio.Booking.Api.Extensions;
 
-/// <summary>
-/// Configura autenticación JWT Bearer.
-/// Lee JwtSettings desde appsettings.json y registra el esquema.
-/// </summary>
 public static class AuthenticationExtensions
 {
-    public static IServiceCollection AddCustomAuthentication(
-        this IServiceCollection services,
-        IConfiguration configuration)
+    public static IServiceCollection AddBookingJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
-        var jwtSettings = configuration
-            .GetSection("JwtSettings")
-            .Get<JwtSettings>()
-            ?? throw new InvalidOperationException(
-                "No se encontró la configuración JwtSettings en appsettings.json.");
+        var jwt = configuration.GetSection(JwtSettings.SectionName).Get<JwtSettings>() ?? new JwtSettings();
 
-        var key = Encoding.UTF8.GetBytes(jwtSettings.SecretKey);
-
-        services.AddAuthentication(options =>
+        if (jwt.Enabled)
         {
-            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        })
-        .AddJwtBearer(options =>
-        {
-            options.RequireHttpsMetadata = true;
-            options.SaveToken = true;
-            options.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(key),
-                ValidateIssuer = true,
-                ValidIssuer = jwtSettings.Issuer,
-                ValidateAudience = true,
-                ValidAudience = jwtSettings.Audience,
-                ValidateLifetime = true,
-                ClockSkew = TimeSpan.Zero
-            };
-        });
+            if (string.IsNullOrWhiteSpace(jwt.SecretKey) || jwt.SecretKey.Length < 32)
+                throw new InvalidOperationException("JwtSettings:SecretKey debe tener al menos 32 caracteres cuando JwtSettings:Enabled es true.");
 
-        // Registra JwtSettings para IOptions<JwtSettings> en controllers
-        services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
+            var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.SecretKey));
 
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = jwt.Issuer,
+                        ValidAudience = jwt.Audience,
+                        IssuerSigningKey = signingKey
+                    };
+                });
+        }
+
+        services.AddAuthorization();
         return services;
     }
 }

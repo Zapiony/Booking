@@ -1,13 +1,14 @@
 namespace Microservicio.Booking.Api.Models.Settings;
 
-/// <summary>
-/// Configuración del JWT leída desde appsettings.json → sección "JwtSettings".
-/// Se inyecta con IOptions<JwtSettings> en los controllers que generan tokens.
-/// </summary>
-public class JwtSettings
+public sealed class JwtSettings
 {
-    public string SecretKey { get; set; } = null!;
-    public string Issuer { get; set; } = null!;
-    public string Audience { get; set; } = null!;
-    public int ExpirationMinutes { get; set; }
+    public const string SectionName = "JwtSettings";
+
+    /// <summary>Si es false, no se registra JWT Bearer ni se exige token en los controladores v1 de este plan.</summary>
+    public bool Enabled { get; set; }
+
+    public string SecretKey { get; set; } = string.Empty;
+    public string Issuer { get; set; } = string.Empty;
+    public string Audience { get; set; } = string.Empty;
+    public int ExpirationMinutes { get; set; } = 60;
 }
