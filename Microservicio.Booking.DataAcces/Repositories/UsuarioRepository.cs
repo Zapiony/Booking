@@ -14,9 +14,9 @@ namespace Microservicio.Booking.DataAccess.Repositories;
 /// </summary>
 public class UsuarioRepository : IUsuarioRepository
 {
-    private readonly BookingDbContext _context;
+    private readonly UsuarioDbContext _context;
 
-    public UsuarioRepository(BookingDbContext context)
+    public UsuarioRepository(UsuarioDbContext context)
     {
         _context = context;
     }
@@ -30,7 +30,7 @@ public class UsuarioRepository : IUsuarioRepository
     /// Excluye registros con borrado lógico aplicado (es_eliminado = true).
     /// </summary>
     private IQueryable<UsuarioAppEntity> QueryVigentes =>
-        _context.UsuariosApp.Where(u => !u.EsEliminado);
+        _context.Usuarios.Where(u => !u.EsEliminado);
 
     // -------------------------------------------------------------------------
     // Lecturas simples
@@ -57,8 +57,6 @@ public class UsuarioRepository : IUsuarioRepository
         CancellationToken cancellationToken = default)
     {
         return await QueryVigentes
-            .Include(u => u.UsuariosRoles.Where(ur => !ur.EsEliminado && ur.Activo))
-                .ThenInclude(ur => ur.Rol)
             .FirstOrDefaultAsync(
                 u => u.Username == username,
                 cancellationToken);
@@ -72,15 +70,6 @@ public class UsuarioRepository : IUsuarioRepository
             .FirstOrDefaultAsync(
                 u => u.Correo == correo,
                 cancellationToken);
-    }
-
-    public async Task<UsuarioAppEntity?> ObtenerParaActualizarAsync(
-    int idUsuario,
-    CancellationToken cancellationToken = default)
-    {
-        return await _context.UsuariosApp
-            .FirstOrDefaultAsync(u => u.IdUsuario == idUsuario
-                                   && !u.EsEliminado, cancellationToken);
     }
 
     // -------------------------------------------------------------------------
@@ -133,7 +122,7 @@ public class UsuarioRepository : IUsuarioRepository
         string username,
         CancellationToken cancellationToken = default)
     {
-        return await _context.UsuariosApp
+        return await _context.Usuarios
             .AnyAsync(u => u.Username == username, cancellationToken);
     }
 
@@ -141,7 +130,7 @@ public class UsuarioRepository : IUsuarioRepository
         string correo,
         CancellationToken cancellationToken = default)
     {
-        return await _context.UsuariosApp
+        return await _context.Usuarios
             .AnyAsync(u => u.Correo == correo, cancellationToken);
     }
 
@@ -153,14 +142,14 @@ public class UsuarioRepository : IUsuarioRepository
         UsuarioAppEntity usuario,
         CancellationToken cancellationToken = default)
     {
-        await _context.UsuariosApp.AddAsync(usuario, cancellationToken);
+        await _context.Usuarios.AddAsync(usuario, cancellationToken);
     }
 
     public void Actualizar(UsuarioAppEntity usuario)
     {
         // EF Core rastrea el objeto si fue obtenido en el mismo contexto.
         // Update() fuerza el tracking en caso de que sea una entidad desconectada.
-        _context.UsuariosApp.Update(usuario);
+        _context.Usuarios.Update(usuario);
     }
 
     public void EliminarLogico(UsuarioAppEntity usuario)
@@ -171,6 +160,6 @@ public class UsuarioRepository : IUsuarioRepository
 
         // EF Core detecta el cambio automáticamente si la entidad está tracked.
         // No es necesario llamar Update() explícitamente en este caso.
-        _context.UsuariosApp.Update(usuario);
+        _context.Usuarios.Update(usuario);
     }
 }

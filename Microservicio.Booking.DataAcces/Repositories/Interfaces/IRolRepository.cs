@@ -54,15 +54,6 @@ public interface IRolRepository
         int tamanoPagina,
         CancellationToken cancellationToken = default);
 
-    Task<RolEntity?> ObtenerRolParaActualizarAsync(
-    int idRol,
-    CancellationToken cancellationToken = default);
-
-    Task<UsuarioRolEntity?> ObtenerAsignacionParaActualizarAsync(
-        int idUsuario,
-        int idRol,
-        CancellationToken cancellationToken = default);
-
     // -------------------------------------------------------------------------
     // Verificaciones — Rol
     // -------------------------------------------------------------------------
