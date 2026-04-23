@@ -29,7 +29,7 @@ builder.Services.AddUsuariosModule(builder.Configuration);
 
 // TODO: otros módulos del equipo se agregan aquí:
 builder.Services.AddClientesModule();
-// builder.Services.AddFacturacionModule(builder.Configuration);
+builder.Services.AddFacturacionModule();
 // builder.Services.AddServiciosModule(builder.Configuration);
 
 // -------------------------------------------------------------------------
