@@ -12,11 +12,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Services\UsuarioService.cs" />
-    <Compile Remove="Services\RolService.cs" />
     <Compile Remove="Services\ClienteService.cs" />
     <Compile Remove="Services\FacturacionService.cs" />
     <Compile Remove="Services\LogAuditoriaService.cs" />
+    <Compile Remove="Services\RolService.cs" />
+    <Compile Remove="Services\UsuarioService.cs" />
   </ItemGroup>
 
 </Project>

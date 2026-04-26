@@ -1,11 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup>
 		<TargetFramework>net10.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<!-- `dotnet run` usa HTTPS por defecto (Postman / navegador en https://localhost:7158/swagger) -->
-		<LaunchProfileName>https</LaunchProfileName>
+		<!-- En depuración, sin apphost nativo se reduce el bloqueo de .exe al recompilar con dotnet run. -->
+		<UseAppHost Condition="'$(Configuration)' == 'Debug'">false</UseAppHost>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -27,13 +27,21 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Microservicio.Booking.Business\Microservicio.Booking.Business.csproj" />
 		<ProjectReference Include="..\Microservicio.Booking.DataAcces\Microservicio.Booking.DataAcces.csproj" />
+		<ProjectReference Include="..\Microservicio.Booking.DataManagement\Microservicio.Booking.DataManagement.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<Compile Remove="Controllers\V1\AuthController.cs" />
-		<Compile Remove="Controllers\V1\RolesController.cs" />
-		<Compile Remove="Controllers\V1\UsuariosController.cs" />
-		<Compile Remove="Extensions\UsuariosServiceExtensions.cs" />
-	</ItemGroup>
+<<<<<<< Updated upstream
+=======
+  <ItemGroup>
+    <ProjectReference Include="..\Microservicio.Booking.DataAcces\Microservicio.Booking.DataAcces.csproj" />
+  </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="Controllers\V1\AuthController.cs" />
+    <Compile Remove="Controllers\V1\RolesController.cs" />
+    <Compile Remove="Controllers\V1\UsuariosController.cs" />
+    <Compile Remove="Extensions\UsuariosServiceExtensions.cs" />
+  </ItemGroup>
+
+>>>>>>> Stashed changes
 </Project>

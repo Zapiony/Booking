@@ -1,7 +1,11 @@
+<<<<<<< Updated upstream
+using Microsoft.OpenApi.Models;
+=======
 using Asp.Versioning.ApiExplorer;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
+>>>>>>> Stashed changes
 
 namespace Microservicio.Booking.Api.Extensions;
 
