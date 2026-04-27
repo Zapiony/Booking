@@ -17,4 +17,12 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.5" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="Services\ClienteDataService.cs" />
+    <Compile Remove="Services\FacturacionDataService.cs" />
+    <Compile Remove="Services\LogAuditoriaDataService.cs" />
+    <Compile Remove="Services\RolDataService.cs" />
+    <Compile Remove="Services\UsuarioDataService.cs" />
+  </ItemGroup>
+
 </Project>

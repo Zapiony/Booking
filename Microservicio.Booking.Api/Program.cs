@@ -10,22 +10,16 @@ builder.Services.AddControllers();
 // -------------------------------------------------------------------------
 // Configuraciones transversales
 // -------------------------------------------------------------------------
-builder.Services.AddCustomApiVersioning();
-builder.Services.AddCustomCors(builder.Configuration);
-builder.Services.AddCustomAuthentication(builder.Configuration);
-builder.Services.AddCustomSwagger();
-builder.Services.AddAuthorization();
+builder.Services.AddBookingApiVersioning();
+builder.Services.AddBookingCors(builder.Configuration);
+builder.Services.AddBookingJwtAuthentication(builder.Configuration);
+builder.Services.AddBookingSwagger();
 
 // -------------------------------------------------------------------------
 // Módulos de negocio
 // Cada módulo del equipo registra sus propios servicios aquí.
 // -------------------------------------------------------------------------
-builder.Services.AddUsuariosModule(builder.Configuration);
-
-// TODO: otros módulos del equipo se agregan aquí:
-builder.Services.AddClientesModule();
-// builder.Services.AddFacturacionModule(builder.Configuration);
-// builder.Services.AddServiciosModule(builder.Configuration);
+builder.Services.AddBookingApplicationServices(builder.Configuration);
 
 var app = builder.Build();
 
@@ -60,7 +54,5 @@ if (jwtSettings?.Enabled == true)
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapStaticAssets();
-app.MapRazorPages().WithStaticAssets();
 
 app.Run();

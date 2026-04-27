@@ -16,11 +16,6 @@ namespace Microservicio.Booking.DataAccess.Repositories;
 public class RolRepository : IRolRepository
 {
     private readonly BookingDbContext _context;
-<<<<<<< Updated upstream
-        
-=======
-
->>>>>>> Stashed changes
     public RolRepository(BookingDbContext context)
     {
         _context = context;

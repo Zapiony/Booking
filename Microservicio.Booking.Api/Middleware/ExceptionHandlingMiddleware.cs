@@ -33,13 +33,6 @@ public sealed class ExceptionHandlingMiddleware
 
     private static async Task EscribirRespuestaAsync(HttpContext context, Exception exception)
     {
-        context.Response.ContentType = "application/json";
-        context.Response.StatusCode = (int)statusCode;
-
-<<<<<<< Updated upstream
-        var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
-        var json = JsonSerializer.Serialize(response, options);
-=======
         var (statusCode, body) = exception switch
         {
             ValidationException ve => (
@@ -55,7 +48,11 @@ public sealed class ExceptionHandlingMiddleware
                 (int)HttpStatusCode.InternalServerError,
                 ApiErrorResponse.Crear("Error interno del servidor.", Array.Empty<string>()))
         };
->>>>>>> Stashed changes
+
+        context.Response.ContentType = "application/json";
+        context.Response.StatusCode = statusCode;
+
+        var json = JsonSerializer.Serialize(body, JsonOptions);
 
         await context.Response.WriteAsync(json);
     }
