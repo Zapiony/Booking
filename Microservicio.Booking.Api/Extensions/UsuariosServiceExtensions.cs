@@ -20,7 +20,7 @@ public static class UsuariosServiceExtensions
     {
         // Capa 1 — DbContext (PostgreSQL)
         services.AddDbContext<BookingDbContext>(options =>
-            options.UseNpgsql(configuration.GetConnectionString("Booking")));
+            options.UseNpgsql(configuration.GetConnectionString("BookingDb")));
 
         // Capa 2 — Unit of Work y servicios de datos
         services.AddScoped<IUnitOfWork, UnitOfWork>();
