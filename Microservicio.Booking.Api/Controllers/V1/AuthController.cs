@@ -2,6 +2,7 @@ using Asp.Versioning;
 using Microservicio.Booking.Api.Models.Common;
 using Microservicio.Booking.Api.Models.Settings;
 using Microservicio.Booking.Business.DTOs.Auth;
+using Microservicio.Booking.Business.DTOs.Cliente;
 using Microservicio.Booking.Business.DTOs.Usuario;
 using Microservicio.Booking.Business.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -20,15 +21,18 @@ public class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;
     private readonly IUsuarioService _usuarioService;
+    private readonly IClienteService _clienteService;
     private readonly JwtSettings _jwtSettings;
 
     public AuthController(
         IAuthService authService,
         IUsuarioService usuarioService,
+        IClienteService clienteService,
         IOptions<JwtSettings> jwtOptions)
     {
         _authService = authService;
         _usuarioService = usuarioService;
+        _clienteService = clienteService;
         _jwtSettings = jwtOptions.Value;
     }
 
@@ -73,13 +77,43 @@ public class AuthController : ControllerBase
     [ProducesResponseType(typeof(ApiResponse<UsuarioResponse>), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Registro(
-    [FromBody] CrearUsuarioRequest request,
-    CancellationToken cancellationToken)
+        [FromBody] CrearUsuarioRequest request,
+        CancellationToken cancellationToken)
     {
-        // Registro público — sin token, el mismo correo es el origen
-        request.CreadoPorUsuario = request.Correo ?? "self";
+        // Auditoría — registro público sin token disponible
+        request.CreadoPorUsuario = request.Correo;
 
-        var result = await _usuarioService.CrearAsync(request, cancellationToken);
-        return StatusCode(201, ApiResponse<UsuarioResponse>.Ok(result, "Usuario creado exitosamente."));
+        // 1. Crear usuario
+        var usuarioCreado = await _usuarioService
+            .CrearAsync(request, cancellationToken);
+
+        // 2. Obtener IdUsuario interno
+        var idUsuario = await _usuarioService
+            .ObtenerIdInternoAsync(usuarioCreado.UsuarioGuid, cancellationToken);
+
+        // 3. Crear perfil de cliente si el request incluye datos de cliente
+        if (request.TieneClienteData)
+        {
+            var clienteRequest = new CrearClienteRequest
+            {
+                IdUsuario = idUsuario,
+                Nombres = request.Nombres,
+                Apellidos = request.Apellidos,
+                RazonSocial = request.RazonSocial,
+                TipoIdentificacion = request.TipoIdentificacion!,
+                NumeroIdentificacion = request.NumeroIdentificacion!,
+                Correo = request.Correo,
+                Telefono = request.Telefono,
+                Direccion = request.Direccion,
+                CreadoPorUsuario = request.Correo,
+                ModificacionIp = HttpContext.Connection.RemoteIpAddress?.ToString(),
+                ServicioOrigen = "Microservicio.Booking.Api"
+            };
+
+            await _clienteService.CrearAsync(clienteRequest, cancellationToken);
+        }
+
+        return StatusCode(201, ApiResponse<UsuarioResponse>.Ok(
+            usuarioCreado, "Usuario y cliente registrados exitosamente."));
     }
 }

@@ -22,6 +22,14 @@ public interface IUsuarioService
         UsuarioFiltroRequest filtro,
         CancellationToken cancellationToken = default);
 
+    /// <summary>
+    /// Retorna el ID interno del usuario a partir de su GUID público.
+    /// Solo para uso interno entre servicios del backend — nunca exponer en la API.
+    /// </summary>
+    Task<int> ObtenerIdInternoAsync(
+        Guid usuarioGuid,
+        CancellationToken cancellationToken = default);
+
     // -------------------------------------------------------------------------
     // Comandos
     // -------------------------------------------------------------------------

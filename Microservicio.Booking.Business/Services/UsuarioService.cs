@@ -157,4 +157,16 @@ public class UsuarioService : IUsuarioService
             Convert.ToBase64String(saltBytes)
         );
     }
+    public async Task<int> ObtenerIdInternoAsync(
+    Guid usuarioGuid,
+    CancellationToken cancellationToken = default)
+    {
+        var model = await _usuarioDataService
+            .ObtenerPorGuidAsync(usuarioGuid, cancellationToken);
+
+        if (model is null)
+            throw new NotFoundException($"No se encontró el usuario con GUID '{usuarioGuid}'.");
+
+        return model.IdUsuario;
+    }
 }
