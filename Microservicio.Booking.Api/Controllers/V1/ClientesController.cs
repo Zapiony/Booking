@@ -206,4 +206,100 @@ public class ClientesController : ControllerBase
             ?? User.Identity?.Name
             ?? "sistema";
     }
+
+    // -------------------------------------------------------------------------
+    // GET /api/v1/clientes/disponibilidad/correo/{correo}
+    // -------------------------------------------------------------------------
+
+    /// <summary>
+    /// Verifica si un correo electrónico está disponible para registro de cliente.
+    /// Endpoint público — no requiere token JWT.
+    /// </summary>
+    [HttpGet("disponibilidad/correo/{correo}")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> VerificarCorreo(string correo, CancellationToken ct)
+    {
+        var disponible = await _clienteService.CorreoDisponibleAsync(correo, ct);
+        return Ok(ApiResponse<object>.Ok(
+            new { correo, disponible },
+            disponible ? "Correo disponible." : "El correo ya está registrado."));
+    }
+
+    // -------------------------------------------------------------------------
+    // GET /api/v1/clientes/disponibilidad/ci/{numero}
+    // -------------------------------------------------------------------------
+
+    /// <summary>
+    /// Verifica si una Cédula de Identidad está disponible.
+    /// Endpoint público — no requiere token JWT.
+    /// </summary>
+    [HttpGet("disponibilidad/ci/{numero}")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> VerificarCedula(string numero, CancellationToken ct)
+    {
+        var disponible = await _clienteService.IdentificacionDisponibleAsync("CI", numero, ct);
+        return Ok(ApiResponse<object>.Ok(
+            new { tipoIdentificacion = "CI", numero, disponible },
+            disponible ? "Cédula disponible." : "La cédula ya está registrada."));
+    }
+
+    // -------------------------------------------------------------------------
+    // GET /api/v1/clientes/disponibilidad/ruc/{numero}
+    // -------------------------------------------------------------------------
+
+    /// <summary>
+    /// Verifica si un RUC está disponible.
+    /// Endpoint público — no requiere token JWT.
+    /// </summary>
+    [HttpGet("disponibilidad/ruc/{numero}")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> VerificarRuc(string numero, CancellationToken ct)
+    {
+        var disponible = await _clienteService.IdentificacionDisponibleAsync("RUC", numero, ct);
+        return Ok(ApiResponse<object>.Ok(
+            new { tipoIdentificacion = "RUC", numero, disponible },
+            disponible ? "RUC disponible." : "El RUC ya está registrado."));
+    }
+
+    // -------------------------------------------------------------------------
+    // GET /api/v1/clientes/disponibilidad/pasaporte/{numero}
+    // -------------------------------------------------------------------------
+
+    /// <summary>
+    /// Verifica si un número de pasaporte está disponible.
+    /// Endpoint público — no requiere token JWT.
+    /// </summary>
+    [HttpGet("disponibilidad/pasaporte/{numero}")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> VerificarPasaporte(string numero, CancellationToken ct)
+    {
+        var disponible = await _clienteService.IdentificacionDisponibleAsync("PASS", numero, ct);
+        return Ok(ApiResponse<object>.Ok(
+            new { tipoIdentificacion = "PASS", numero, disponible },
+            disponible ? "Pasaporte disponible." : "El pasaporte ya está registrado."));
+    }
+
+    // -------------------------------------------------------------------------
+    // GET /api/v1/clientes/disponibilidad/extranjero/{numero}
+    // -------------------------------------------------------------------------
+
+    /// <summary>
+    /// Verifica si un número de identificación de extranjero está disponible.
+    /// Endpoint público — no requiere token JWT.
+    /// </summary>
+    [HttpGet("disponibilidad/extranjero/{numero}")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> VerificarExtranjero(string numero, CancellationToken ct)
+    {
+        var disponible = await _clienteService.IdentificacionDisponibleAsync("EXT", numero, ct);
+        return Ok(ApiResponse<object>.Ok(
+            new { tipoIdentificacion = "EXT", numero, disponible },
+            disponible ? "Identificación disponible." : "La identificación ya está registrada."));
+    }
+
 }
