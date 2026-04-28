@@ -23,6 +23,13 @@ public interface IUsuarioService
         CancellationToken cancellationToken = default);
 
     Task<bool> UsernameDisponibleAsync(string username, CancellationToken ct = default);
+    /// <summary>
+    /// Retorna el ID interno del usuario a partir de su GUID público.
+    /// Solo para uso interno entre servicios del backend — nunca exponer en la API.
+    /// </summary>
+    Task<int> ObtenerIdInternoAsync(
+        Guid usuarioGuid,
+        CancellationToken cancellationToken = default);
 
     // -------------------------------------------------------------------------
     // Comandos
