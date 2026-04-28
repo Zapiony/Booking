@@ -1,4 +1,4 @@
-﻿using Microservicio.Booking.Business.DTOs.Usuario;
+using Microservicio.Booking.Business.DTOs.Usuario;
 using Microservicio.Booking.DataManagement.Models;
 
 namespace Microservicio.Booking.Business.Interfaces;
@@ -22,6 +22,7 @@ public interface IUsuarioService
         UsuarioFiltroRequest filtro,
         CancellationToken cancellationToken = default);
 
+    Task<bool> UsernameDisponibleAsync(string username, CancellationToken ct = default);
     /// <summary>
     /// Retorna el ID interno del usuario a partir de su GUID público.
     /// Solo para uso interno entre servicios del backend — nunca exponer en la API.

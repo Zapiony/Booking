@@ -46,6 +46,24 @@ public class UsuariosController : ControllerBase
     }
 
     // -------------------------------------------------------------------------
+    // GET /api/v1/usuarios/disponibilidad/{username}
+    // -------------------------------------------------------------------------
+
+    /// <summary>
+    /// Verifica si un username está disponible.
+    /// Este endpoint es público para validaciones desde el frontend durante el registro.
+    /// </summary>
+    [HttpGet("disponibilidad/{username}")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> VerificarDisponibilidad(string username, CancellationToken ct)
+    {
+        var disponible = await _usuarioService.UsernameDisponibleAsync(username, ct);
+        return Ok(ApiResponse<object>.Ok(new { username, disponible }, 
+            disponible ? "Username disponible." : "Username ya está en uso."));
+    }
+
+    // -------------------------------------------------------------------------
     // POST /api/v1/usuarios/buscar
     // -------------------------------------------------------------------------
 
