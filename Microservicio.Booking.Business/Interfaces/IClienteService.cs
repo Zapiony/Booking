@@ -90,4 +90,19 @@ public interface IClienteService
         string nuevoEstado,
         string modificadoPorUsuario,
         CancellationToken cancellationToken = default);
+
+    // -------------------------------------------------------------------------
+    // Verificaciones de disponibilidad — públicas para el registro
+    // -------------------------------------------------------------------------
+
+    Task<bool> CorreoDisponibleAsync(
+        string correo,
+        CancellationToken cancellationToken = default);
+
+    Task<bool> IdentificacionDisponibleAsync(
+        string tipoIdentificacion,
+        string numeroIdentificacion,
+        CancellationToken cancellationToken = default);
+
+
 }

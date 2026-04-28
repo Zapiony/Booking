@@ -241,4 +241,23 @@ public class ClienteService : IClienteService
 
         return ClienteBusinessMapper.ToResponse(model!);
     }
+
+    public async Task<bool> CorreoDisponibleAsync(
+    string correo,
+    CancellationToken cancellationToken = default)
+    {
+        return !await _clienteDataService.ExisteCorreoAsync(correo, cancellationToken);
+    }
+
+    public async Task<bool> IdentificacionDisponibleAsync(
+        string tipoIdentificacion,
+        string numeroIdentificacion,
+        CancellationToken cancellationToken = default)
+    {
+        return !await _clienteDataService.ExisteNumeroIdentificacionAsync(
+            tipoIdentificacion,
+            numeroIdentificacion,
+            cancellationToken);
+    }
+
 }
