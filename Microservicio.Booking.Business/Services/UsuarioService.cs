@@ -1,4 +1,4 @@
-﻿using Microservicio.Booking.Business.DTOs.Usuario;
+using Microservicio.Booking.Business.DTOs.Usuario;
 using Microservicio.Booking.Business.Exceptions;
 using Microservicio.Booking.Business.Interfaces;
 using Microservicio.Booking.Business.Mappers;
@@ -59,6 +59,12 @@ public class UsuarioService : IUsuarioService
             resultado.TotalRegistros,
             resultado.PaginaActual,
             resultado.TamanoPagina);
+    }
+
+    public async Task<bool> UsernameDisponibleAsync(string username, CancellationToken ct = default)
+    {
+        var existe = await _usuarioDataService.ExisteUsernameAsync(username, ct);
+        return !existe; // true = disponible, false = ocupado
     }
 
     public async Task<UsuarioResponse> CrearAsync(

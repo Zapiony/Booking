@@ -1,4 +1,4 @@
-﻿using Microservicio.Booking.Business.DTOs.Usuario;
+using Microservicio.Booking.Business.DTOs.Usuario;
 using Microservicio.Booking.DataManagement.Models;
 
 namespace Microservicio.Booking.Business.Interfaces;
@@ -21,6 +21,8 @@ public interface IUsuarioService
     Task<DataPagedResult<UsuarioResponse>> BuscarAsync(
         UsuarioFiltroRequest filtro,
         CancellationToken cancellationToken = default);
+
+    Task<bool> UsernameDisponibleAsync(string username, CancellationToken ct = default);
 
     // -------------------------------------------------------------------------
     // Comandos
