@@ -73,9 +73,12 @@ public class AuthController : ControllerBase
     [ProducesResponseType(typeof(ApiResponse<UsuarioResponse>), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Registro(
-        [FromBody] CrearUsuarioRequest request,
-        CancellationToken cancellationToken)
+    [FromBody] CrearUsuarioRequest request,
+    CancellationToken cancellationToken)
     {
+        // Registro público — sin token, el mismo correo es el origen
+        request.CreadoPorUsuario = request.Correo ?? "self";
+
         var result = await _usuarioService.CrearAsync(request, cancellationToken);
         return StatusCode(201, ApiResponse<UsuarioResponse>.Ok(result, "Usuario creado exitosamente."));
     }
