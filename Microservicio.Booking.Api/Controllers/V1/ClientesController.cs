@@ -36,7 +36,7 @@ public class ClientesController : ControllerBase
     /// Obtiene un cliente por su GUID público.
     /// </summary>
     [HttpGet("{guidCliente:guid}")]
-    [Authorize(Roles = "ADMINISTRADOR,VENDEDOR")]
+    [Authorize(Roles = "ADMINISTRADOR,VENDEDOR,CLIENTE")]
     [ProducesResponseType(typeof(ApiResponse<ClienteResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> ObtenerPorGuid(
@@ -125,7 +125,7 @@ public class ClientesController : ControllerBase
     /// Actualiza los datos de un cliente existente.
     /// </summary>
     [HttpPut("{guidCliente:guid}")]
-    [Authorize(Roles = "ADMINISTRADOR,VENDEDOR")]
+    [Authorize(Roles = "ADMINISTRADOR,VENDEDOR,CLIENTE")]
     [ProducesResponseType(typeof(ApiResponse<ClienteResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status404NotFound)]
