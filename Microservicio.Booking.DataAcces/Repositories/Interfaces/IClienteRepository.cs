@@ -20,7 +20,7 @@ public interface IClienteRepository
         Guid guidCliente,
         CancellationToken cancellationToken = default);
 
-    Task<ClienteEntity?> ObtenerPorIdUsuarioAsync( feat(business): añadir lógica de negocio pa
+    Task<ClienteEntity?> ObtenerPorIdUsuarioAsync(
         int idUsuario,
         CancellationToken cancellationToken = default);
 
