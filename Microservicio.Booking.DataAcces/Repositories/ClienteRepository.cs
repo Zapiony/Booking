@@ -1,4 +1,4 @@
-﻿using Microservicio.Booking.DataAccess.Common;
+using Microservicio.Booking.DataAccess.Common;
 using Microservicio.Booking.DataAccess.Context;
 using Microservicio.Booking.DataAccess.Entities;
 using Microservicio.Booking.DataAccess.Repositories.Interfaces;
@@ -58,6 +58,14 @@ public class ClienteRepository : IClienteRepository
     {
         return await QueryVigentes
             .FirstOrDefaultAsync(c => c.IdUsuario == idUsuario, cancellationToken);
+    }
+    
+    public async Task<ClienteEntity?> ObtenerPorUsuarioGuidAsync(
+        Guid usuarioGuid,
+        CancellationToken cancellationToken = default)
+    {
+        return await QueryVigentes
+            .FirstOrDefaultAsync(c => c.UsuarioApp.UsuarioGuid == usuarioGuid, cancellationToken);
     }
 
     public async Task<ClienteEntity?> ObtenerPorCorreoAsync(
