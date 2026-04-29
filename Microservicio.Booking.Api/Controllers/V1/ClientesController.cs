@@ -1,4 +1,4 @@
-﻿// Microservicio.Booking.Api/Controllers/V1/ClientesController.cs
+// Microservicio.Booking.Api/Controllers/V1/ClientesController.cs
 
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
@@ -44,6 +44,25 @@ public class ClientesController : ControllerBase
         CancellationToken cancellationToken)
     {
         var result = await _clienteService.ObtenerPorGuidAsync(guidCliente, cancellationToken);
+        return Ok(ApiResponse<ClienteResponse>.Ok(result, "Consulta exitosa."));
+    }
+
+    // -------------------------------------------------------------------------
+    // GET /api/v1/clientes/usuario/{usuarioGuid}
+    // -------------------------------------------------------------------------
+
+    /// <summary>
+    /// Obtiene la información del cliente vinculado a un usuario por su GUID.
+    /// </summary>
+    [HttpGet("usuario/{usuarioGuid:guid}")]
+    [Authorize(Roles = "ADMINISTRADOR,VENDEDOR,CLIENTE")]
+    [ProducesResponseType(typeof(ApiResponse<ClienteResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> ObtenerPorUsuarioGuid(
+        Guid usuarioGuid,
+        CancellationToken cancellationToken)
+    {
+        var result = await _clienteService.ObtenerPorUsuarioGuidAsync(usuarioGuid, cancellationToken);
         return Ok(ApiResponse<ClienteResponse>.Ok(result, "Consulta exitosa."));
     }
 
