@@ -1,4 +1,4 @@
-﻿// Microservicio.Booking.Business/Services/ClienteService.cs
+// Microservicio.Booking.Business/Services/ClienteService.cs
 
 using Microservicio.Booking.Business.DTOs.Cliente;
 using Microservicio.Booking.Business.Exceptions;
@@ -71,6 +71,20 @@ public class ClienteService : IClienteService
         if (model is null)
             throw new NotFoundException(
                 $"No se encontró un cliente vinculado al usuario '{idUsuario}'.");
+
+        return ClienteBusinessMapper.ToResponse(model);
+    }
+
+    public async Task<ClienteResponse> ObtenerPorUsuarioGuidAsync(
+        Guid usuarioGuid,
+        CancellationToken cancellationToken = default)
+    {
+        var model = await _clienteDataService
+            .ObtenerPorUsuarioGuidAsync(usuarioGuid, cancellationToken);
+
+        if (model is null)
+            throw new NotFoundException(
+                $"No se encontró un cliente vinculado al usuario con GUID '{usuarioGuid}'.");
 
         return ClienteBusinessMapper.ToResponse(model);
     }

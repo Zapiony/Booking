@@ -1,4 +1,4 @@
-﻿// Microservicio.Booking.Business/Interfaces/IClienteService.cs
+// Microservicio.Booking.Business/Interfaces/IClienteService.cs
 
 using Microservicio.Booking.Business.DTOs.Cliente;
 using Microservicio.Booking.DataManagement.Models;
@@ -39,6 +39,14 @@ public interface IClienteService
     /// </summary>
     Task<ClienteResponse> ObtenerPorIdUsuarioAsync(
         int idUsuario,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Obtiene el cliente vinculado a un usuario por su GUID.
+    /// Lanza NotFoundException si no existe.
+    /// </summary>
+    Task<ClienteResponse> ObtenerPorUsuarioGuidAsync(
+        Guid usuarioGuid,
         CancellationToken cancellationToken = default);
 
     /// <summary>
