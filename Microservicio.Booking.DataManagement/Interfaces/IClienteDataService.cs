@@ -1,4 +1,4 @@
-﻿using Microservicio.Booking.DataManagement.Models;
+using Microservicio.Booking.DataManagement.Models;
 
 namespace Microservicio.Booking.DataManagement.Interfaces;
 
@@ -34,6 +34,10 @@ public interface IClienteDataService
     /// </summary>
     Task<ClienteDataModel?> ObtenerPorIdUsuarioAsync(
         int idUsuario,
+        CancellationToken cancellationToken = default);
+
+    Task<ClienteDataModel?> ObtenerPorUsuarioGuidAsync(
+        Guid usuarioGuid,
         CancellationToken cancellationToken = default);
 
     /// <summary>
