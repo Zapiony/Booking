@@ -1,4 +1,4 @@
-﻿using Microservicio.Booking.DataAccess.Entities;
+using Microservicio.Booking.DataAccess.Entities;
 using Microservicio.Booking.DataAccess.Common;
 
 namespace Microservicio.Booking.DataAccess.Repositories.Interfaces;
@@ -20,8 +20,12 @@ public interface IClienteRepository
         Guid guidCliente,
         CancellationToken cancellationToken = default);
 
-    Task<ClienteEntity?> ObtenerPorIdUsuarioAsync(
+    Task<ClienteEntity?> ObtenerPorIdUsuarioAsync( feat(business): añadir lógica de negocio pa
         int idUsuario,
+        CancellationToken cancellationToken = default);
+
+    Task<ClienteEntity?> ObtenerPorUsuarioGuidAsync(
+        Guid usuarioGuid,
         CancellationToken cancellationToken = default);
 
     Task<ClienteEntity?> ObtenerPorCorreoAsync(

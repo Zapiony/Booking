@@ -1,4 +1,4 @@
-﻿// Microservicio.Booking.DataManagement/Services/ClienteDataService.cs
+// Microservicio.Booking.DataManagement/Services/ClienteDataService.cs
 
 using Microservicio.Booking.DataAccess.Queries;
 using Microservicio.Booking.DataAccess.Common;
@@ -56,6 +56,18 @@ public class ClienteDataService : IClienteDataService
     {
         var entity = await _unitOfWork.ClienteRepository
             .ObtenerPorIdUsuarioAsync(idUsuario, cancellationToken);
+
+        return entity is null
+            ? null
+            : ClienteDataMapper.ToDataModel(entity);
+    }
+
+    public async Task<ClienteDataModel?> ObtenerPorUsuarioGuidAsync(
+        Guid usuarioGuid,
+        CancellationToken cancellationToken = default)
+    {
+        var entity = await _unitOfWork.ClienteRepository
+            .ObtenerPorUsuarioGuidAsync(usuarioGuid, cancellationToken);
 
         return entity is null
             ? null
